@@ -1,5 +1,5 @@
 # BarbellBuddy
-
+## Assignment 2 (Technical Portion)
 ### Completed
 - Setup repository on GitHub 
 - Setup static analysis tool scripts
@@ -10,11 +10,11 @@
 - Write code for authentication (login and register)
 - Write the REST API to support our functionality
 - Design mock-up of user interface for all pages
-- Write code for other functionalities:
-- Barbell Weight Calculator
-- Inventory for Plates
-- Conversion Calculator (kg to lbs, vice-versa)
-- Forum for posting personal records
+* Write code for other functionalities:
+  * Barbell Weight Calculator
+  * Inventory for Plates
+  * Conversion Calculator (kg to lbs, vice-versa)
+  * Forum for posting personal records
 
 ### Team
 #### Gian Calica
