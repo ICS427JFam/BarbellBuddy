@@ -18,37 +18,37 @@
 
 ### Team
 - Gian Calica
-..* Contribution
+⋅⋅* Contribution
 ....* Setup the repository on GitHub
 ....* Organized and setup the directories within our source code, creating templates for the pages
 ....* Wrote JavaScript code on routing for links in the web app
 ....* Wrote CSS to be used for the design of our barbell and plates
 ....* Setup our static analysis tool, ESLint
-..* Planning
+⋅⋅* Planning
 ....* Write the code for our functionality Barbell Weight Calculator
 
 - Mercedez Castro
-..* Contribution
+⋅⋅* Contribution
 ...* Created the functions, security, privacy, and design requirements.
 ....* Researched approved tools for each layer of our project.
 ....* Helped to compile a comprehensive list of each specific software and version.
-..* Planning
+⋅⋅* Planning
 ....* Design a mock-up of the user interface.
 ....* Paper prototype for user experience and feedback.
 ....* Create Javascript templates of the user interface.
 
 - Tysen Imai-Toyama
-..* Contribution
+⋅⋅* Contribution
 ....* Created quality gates and the risk assessment plan.
 ....* Researched approved tools for each layer of our project.
 ....* Helped to compile a comprehensive list of each specific software and version.
-..* Planning
+⋅⋅* Planning
 ....* Coding the functionality of login and logouts with redirect pages. Leveraging the Passport JS package to implement authentication.
 
 - Hyosun Song
-..* Contribution
+⋅⋅* Contribution
 ....* Created the functions, security, privacy, and design requirements.
 ....* Researched approved tools for each layer of our project.
 ....* Helped to compile a comprehensive list of each specific software and version.
-..* Planning
+⋅⋅* Planning
 ....* Test
