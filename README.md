@@ -19,7 +19,7 @@
 ### Team
 - Gian Calica
 ⋅⋅* Contribution
-....* Setup the repository on GitHub
+⋅⋅⋅⋅* Setup the repository on GitHub
 ....* Organized and setup the directories within our source code, creating templates for the pages
 ....* Wrote JavaScript code on routing for links in the web app
 ....* Wrote CSS to be used for the design of our barbell and plates
