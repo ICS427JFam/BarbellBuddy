@@ -51,4 +51,4 @@
    * Researched approved tools for each layer of our project.
    * Helped to compile a comprehensive list of each specific software and version.
  * Planning
-   * Test
+   * Write the code for our functionality for Inventory for Plates.
