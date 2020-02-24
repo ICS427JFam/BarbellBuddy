@@ -17,7 +17,7 @@
 - Forum for posting personal records
 
 ### Team
-- Gian Calica
+#### Gian Calica
  * Contribution
    * Setup the repository on GitHub
    * Organized and setup the directories within our source code, creating templates for the pages
@@ -27,7 +27,7 @@
  * Planning
    * Write the code for our functionality Barbell Weight Calculator
 
-- Mercedez Castro
+#### Mercedez Castro
  * Contribution
    * Created the functions, security, privacy, and design requirements.
    * Researched approved tools for each layer of our project.
@@ -37,7 +37,7 @@
    * Paper prototype for user experience and feedback.
    * Create Javascript templates of the user interface.
 
-- Tysen Imai-Toyama
+#### Tysen Imai-Toyama
  * Contribution
    * Created quality gates and the risk assessment plan.
    * Researched approved tools for each layer of our project.
@@ -45,7 +45,7 @@
  * Planning
    * Coding the functionality of login and logouts with redirect pages. Leveraging the Passport JS package to implement authentication.
 
-- Hyosun Song
+#### Hyosun Song
  * Contribution
    * Created the functions, security, privacy, and design requirements.
    * Researched approved tools for each layer of our project.
