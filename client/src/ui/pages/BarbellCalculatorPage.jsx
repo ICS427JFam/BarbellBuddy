@@ -5,6 +5,12 @@ class BarbellCalculatorPage extends React.Component {
     super(props);
     this.state = {};
   }
+
+  render() {
+    return (
+      <div>Barbell Calculator Page</div>
+    );
+  }
 }
 
 export default BarbellCalculatorPage;

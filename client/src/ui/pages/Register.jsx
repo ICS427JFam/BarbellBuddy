@@ -5,6 +5,12 @@ class Register extends React.Component {
     super(props);
     this.state = {};
   }
+
+  render() {
+    return (
+      <div>Register Page</div>
+    );
+  }
 }
 
 export default Register;

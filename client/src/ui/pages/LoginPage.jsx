@@ -5,6 +5,12 @@ class LoginPage extends React.Component {
     super(props);
     this.state = {};
   }
+
+  render() {
+    return (
+      <div>Login Page</div>
+    );
+  }
 }
 
 export default LoginPage;
