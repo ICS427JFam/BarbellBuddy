@@ -1,0 +1,30 @@
+{
+  "name": "BarbellBuddy",
+  "version": "1.0.0",
+  "description": "- Setup repository on GitHub \r - Setup static analysis tool scripts\r - Routing for our web app\r - Some starting front-end design for the web app",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "concurrently": "^5.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.3",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"cd server && node server.js\" \"cd client && npm start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ICS427JFam/BarbellBuddy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ICS427JFam/BarbellBuddy/issues"
+  },
+  "homepage": "https://github.com/ICS427JFam/BarbellBuddy#readme"
+}
