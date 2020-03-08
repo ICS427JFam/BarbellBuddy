@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Form } from 'semantic-ui-react';
+import { Container, Form, Header } from 'semantic-ui-react';
 import Swal from 'sweetalert2/dist/sweetalert2.all.min';
 import Barbell from '../components/BarbellCalculator/Barbell';
 import Kilogram25Plate from '../components/BarbellCalculator/KilogramWeights/Kilogram25Plate';
@@ -12,17 +12,26 @@ import Kilogram20Change from '../components/BarbellCalculator/KilogramWeights/Ki
 import Kilogram15Change from '../components/BarbellCalculator/KilogramWeights/Kilogram15Change';
 import Kilogram10Change from '../components/BarbellCalculator/KilogramWeights/Kilogram10Change';
 import Kilogram05Change from '../components/BarbellCalculator/KilogramWeights/Kilogram05Change';
+import Pound45Plate from '../components/BarbellCalculator/PoundWeights/Pound45Plate';
+import Pound35Plate from '../components/BarbellCalculator/PoundWeights/Pound35Plate';
+import Pound25Plate from '../components/BarbellCalculator/PoundWeights/Pound25Plate';
+import Pound10Plate from '../components/BarbellCalculator/PoundWeights/Pound10Plate';
+import Pound5Change from '../components/BarbellCalculator/PoundWeights/Pound5Change';
+import Pound25Change from '../components/BarbellCalculator/PoundWeights/Pound25Change';
+import Footer from '../components/Shared/Footer';
 
 class BarbellCalculatorPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       weightInput: '',
-      sidePlates: {},
+      outputWeightsArr: [],
+      outputMultipliersArr: [],
+      remainderAmount: 0,
     };
     // TODO: These constants should be fetched from API
-    this.unit = 'pounds';
-    this.barType = 'men';
+    this.unit = 'pounds'; // kilograms or pounds (with the s)
+    this.barType = 'men'; // men or women
     if (this.unit === 'kilograms') {
       if (this.barType === 'men') {
         this.barWeight = 20;
@@ -56,13 +65,13 @@ class BarbellCalculatorPage extends React.Component {
         '10': 4,
         '5': 2,
         '2.5': 2,
-        '1.25': 0,
       };
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.calculateWeightAvailable = this.calculateWeightAvailable.bind(this);
     this.calculateWeights = this.calculateWeights.bind(this);
+    this.renderKilogramPlates = this.renderKilogramPlates.bind(this);
   }
 
   handleChange(e, { name, value }) {
@@ -102,10 +111,14 @@ class BarbellCalculatorPage extends React.Component {
   }
 
   calculateWeights(weightInput) {
-    const { barWeight, plates, plateInventory } = this;
+    const {
+      barWeight, plates, plateInventory, unit,
+    } = this;
     const actualWeight = weightInput - barWeight;
     let remain = actualWeight / 2;
-    const retArr = [];
+    const retWeightArr = [];
+    const retMultiplierArr = [];
+    let remainder = 0;
     plates.forEach((plate) => {
       let num = 0;
       const weightAvailable = plateInventory[plate];
@@ -119,27 +132,131 @@ class BarbellCalculatorPage extends React.Component {
       } else {
         num = 0;
       }
-      const remainder = remain * 2;
-      const retObject = {
-        [plate.toString()]: num,
-      };
-      retArr.push(retObject);
+      remainder = remain * 2;
+      retWeightArr.push(plate);
+      retMultiplierArr.push(num);
     });
-    this.setState({ sidePlates: retArr });
+    if (remainder > 0) {
+      Swal.fire({
+        title: 'Weight Input Exceeded Amount Available',
+        icon: 'info',
+        type: 'info',
+        html: `Due to insufficient weight inventory, your weight input has been rounded down to ${weightInput - remainder} ${unit}`,
+        timerProgressBar: true,
+        timer: 5000,
+      });
+    }
+    this.setState({ outputWeightsArr: retWeightArr, outputMultipliersArr: retMultiplierArr });
+  }
+
+  renderKilogramPlates() {
+    const { outputWeightsArr, outputMultipliersArr } = this.state;
+    const ret = [];
+    for (let i = 0; i < outputWeightsArr.length; i++) {
+      if (i === 0) { // 25 kg
+        for (let j = 0; j < outputMultipliersArr[i]; j++) {
+          ret.push(<Kilogram25Plate key={`kilogram-${i}-${j}`}/>);
+        }
+      }
+      if (i === 1) { // 20 kg
+        for (let j = 0; j < outputMultipliersArr[i]; j++) {
+          ret.push(<Kilogram20Plate key={`kilogram-${i}-${j}`}/>);
+        }
+      }
+      if (i === 2) { // 15 kg
+        for (let j = 0; j < outputMultipliersArr[i]; j++) {
+          ret.push(<Kilogram15Plate key={`kilogram-${i}-${j}`}/>);
+        }
+      }
+      if (i === 3) { // 10 kg
+        for (let j = 0; j < outputMultipliersArr[i]; j++) {
+          ret.push(<Kilogram10Plate key={`kilogram-${i}-${j}`}/>);
+        }
+      }
+      if (i === 4) { // 5 kg
+        for (let j = 0; j < outputMultipliersArr[i]; j++) {
+          ret.push(<Kilogram5Plate key={`kilogram-${i}-${j}`}/>);
+        }
+      }
+      if (i === 5) { // 2.5 kg
+        for (let j = 0; j < outputMultipliersArr[i]; j++) {
+          ret.push(<Kilogram25Change key={`kilogram-${i}-${j}`}/>);
+        }
+      }
+      if (i === 6) { // 2.0 kg
+        for (let j = 0; j < outputMultipliersArr[i]; j++) {
+          ret.push(<Kilogram20Change key={`kilogram-${i}-${j}`}/>);
+        }
+      }
+      if (i === 7) { // 1.5 kg
+        for (let j = 0; j < outputMultipliersArr[i]; j++) {
+          ret.push(<Kilogram15Change key={`kilogram-${i}-${j}`}/>);
+        }
+      }
+      if (i === 8) { // 1.0 kg
+        for (let j = 0; j < outputMultipliersArr[i]; j++) {
+          ret.push(<Kilogram10Change key={`kilogram-${i}-${j}`}/>);
+        }
+      }
+      if (i === 9) { // 0.5 kg
+        for (let j = 0; j < outputMultipliersArr[i]; j++) {
+          ret.push(<Kilogram05Change key={`kilogram-${i}-${j}`}/>);
+        }
+      }
+    }
+    return ret;
+  }
+
+  renderPoundPlates() {
+    const { outputWeightsArr, outputMultipliersArr } = this.state;
+    const ret = [];
+    for (let i = 0; i < outputWeightsArr.length; i++) {
+      if (i === 0) { // 45 lbs
+        for (let j = 0; j < outputMultipliersArr[i]; j++) {
+          ret.push(<Pound45Plate key={`pound-${i}-${j}`}/>);
+        }
+      }
+      if (i === 1) { // 35 lbs
+        for (let j = 0; j < outputMultipliersArr[i]; j++) {
+          ret.push(<Pound35Plate key={`pound-${i}-${j}`}/>);
+        }
+      }
+      if (i === 2) { // 25 lbs
+        for (let j = 0; j < outputMultipliersArr[i]; j++) {
+          ret.push(<Pound25Plate key={`pound-${i}-${j}`}/>);
+        }
+      }
+      if (i === 3) { // 10 kg
+        for (let j = 0; j < outputMultipliersArr[i]; j++) {
+          ret.push(<Pound10Plate key={`pound-${i}-${j}`}/>);
+        }
+      }
+      if (i === 4) { // 5 lbs
+        for (let j = 0; j < outputMultipliersArr[i]; j++) {
+          ret.push(<Pound5Change key={`pound-${i}-${j}`}/>);
+        }
+      }
+      if (i === 5) { // 2.5 lbs
+        for (let j = 0; j < outputMultipliersArr[i]; j++) {
+          ret.push(<Pound25Change key={`pound-${i}-${j}`}/>);
+        }
+      }
+    }
+    return ret;
   }
 
   render() {
-    const { weightInput, sidePlates } = this.state;
+    const { weightInput, outputWeightsArr, outputMultipliersArr } = this.state;
     const { unit } = this;
     return (
       <>
-        <div>Barbell Calculator Page</div>
-        <Container>
-          <Form onSubmit={this.handleSubmit}>
+        <Container textAlign="center" style={{ marginTop: 100 }}>
+          <Header>Input Weight ({unit})</Header>
+          <Form onSubmit={this.handleSubmit} style={{ maxWidth: 300, margin: 'auto' }}>
             <Form.Input
-              placeholder="Weight"
               name="weightInput"
               value={weightInput}
+              required
               onChange={this.handleChange}
             />
             <Form.Button content="Calculate"/>
@@ -149,33 +266,28 @@ class BarbellCalculatorPage extends React.Component {
         <Barbell
           leftSide={(
             <>
-              <Kilogram25Plate/>
-              <Kilogram20Plate/>
-              <Kilogram15Plate/>
-              <Kilogram10Plate/>
-              <Kilogram5Plate/>
-              <Kilogram25Change/>
-              <Kilogram20Change/>
-              <Kilogram15Change/>
-              <Kilogram10Change/>
-              <Kilogram05Change/>
+              {unit === 'kilograms'
+                ? this.renderKilogramPlates()
+                : this.renderPoundPlates()}
             </>
           )}
           rightSide={(
             <>
-              <Kilogram25Plate/>
-              <Kilogram20Plate/>
-              <Kilogram15Plate/>
-              <Kilogram10Plate/>
-              <Kilogram5Plate/>
-              <Kilogram25Change/>
-              <Kilogram20Change/>
-              <Kilogram15Change/>
-              <Kilogram10Change/>
-              <Kilogram05Change/>
+              {unit === 'kilograms'
+                ? this.renderKilogramPlates()
+                : this.renderPoundPlates()}
             </>
           )}
         />
+
+        <Container textAlign="center" style={{ marginTop: 50 }}>
+          <Header as="h1">Plates PER SIDE</Header>
+          {outputWeightsArr.map((weight, index) => (outputMultipliersArr[index] !== 0
+            ? <Header as="h3">{weight} {unit} x{outputMultipliersArr[index]}</Header>
+            : ''))}
+        </Container>
+
+        <Footer/>
       </>
     );
   }

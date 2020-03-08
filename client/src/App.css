@@ -44,7 +44,7 @@
   position: relative;
   max-width: 80%;
   height: 50px;
-  margin: 250px auto auto;
+  margin: 100px auto auto;
 }
 
 .bar .side {
@@ -68,6 +68,7 @@
   right: 0;
 }
 
+/* ----------------------------------------- KILOGRAMS ----------------------------------------- */
 .bar .kilogram-25 {
   background: radial-gradient(circle, #a71d31, #3f0d12);
   margin-top: -100px;
@@ -117,12 +118,12 @@
 }
 
 .bar .kilogram-20-change {
-  background: radial-gradient(circle, #009ffd, #2a2a72);
-  margin-top: -50px;
-  border: 1px solid #000;
-  width: 25px;
-  height: 150px;
-}
+   background: radial-gradient(circle, #009ffd, #2a2a72);
+   margin-top: -50px;
+   border: 1px solid #000;
+   width: 25px;
+   height: 150px;
+ }
 
 .bar .kilogram-15-change {
   background: radial-gradient(circle, #ffdd00, #fbb034);
@@ -142,6 +143,55 @@
 
 .bar .kilogram-05-change {
   background: radial-gradient(circle, #ffffff, #bbbbbb);
+  margin-top: -50px;
+  border: 1px solid #000;
+  width: 25px;
+  height: 150px;
+}
+
+/* ----------------------------------------- POUNDS ----------------------------------------- */
+.bar .pound-45 {
+  background: radial-gradient(circle, #009ffd, #2a2a72);
+  margin-top: -100px;
+  border: 1px solid #000;
+  width: 45px;
+  height: 250px;
+}
+
+.bar .pound-35 {
+  background: radial-gradient(circle, #ffdd00, #fbb034);
+  margin-top: -100px;
+  border: 1px solid #000;
+  width: 40px;
+  height: 250px;
+}
+
+.bar .pound-25 {
+  background: radial-gradient(circle, #5aff15, #00b712);
+  margin-top: -100px;
+  border: 1px solid #000;
+  width: 35px;
+  height: 250px;
+}
+
+.bar .pound-10 {
+  background: radial-gradient(circle, #2f2f2f, #000000);
+  margin-top: -100px;
+  border: 1px solid #000;
+  width: 30px;
+  height: 250px;
+}
+
+.bar .pound-5-change {
+  background: radial-gradient(circle, #ffffff, #bbbbbb);
+  margin-top: -50px;
+  border: 1px solid #000;
+  width: 25px;
+  height: 150px;
+}
+
+.bar .pound-25-change {
+  background: radial-gradient(circle, #a71d31, #3f0d12);
   margin-top: -50px;
   border: 1px solid #000;
   width: 25px;

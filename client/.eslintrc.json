@@ -29,6 +29,7 @@
       "no-unused-vars": "warn",
       "react/jsx-tag-spacing": "off",
       "no-plusplus": "off",
-      "quote-props": "off"
+      "quote-props": "off",
+      "react/jsx-one-expression-per-line": "off"
     }
 }
