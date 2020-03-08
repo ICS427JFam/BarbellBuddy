@@ -27,6 +27,8 @@
       "no-console": "warn",
       "react/jsx-props-no-spreading": "off",
       "no-unused-vars": "warn",
-      "react/jsx-tag-spacing": "off"
+      "react/jsx-tag-spacing": "off",
+      "no-plusplus": "off",
+      "quote-props": "off"
     }
 }
