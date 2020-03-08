@@ -36,3 +36,114 @@
     transform: rotate(360deg);
   }
 }
+
+/* BarbellCalculatorPage */
+.bar {
+  background: radial-gradient(#939393, #2f2f2f);
+  border: 2px solid #000000;
+  position: relative;
+  max-width: 80%;
+  height: 50px;
+  margin: 250px auto auto;
+}
+
+.bar .side {
+  position: absolute;
+  width: 40%;
+}
+
+.bar .left-side {
+  left: 0;
+}
+
+.bar .left-side span {
+  float: right;
+}
+
+.bar .right-side span {
+  float: left;
+}
+
+.bar .right-side {
+  right: 0;
+}
+
+.bar .kilogram-25 {
+  background: radial-gradient(circle, #a71d31, #3f0d12);
+  margin-top: -100px;
+  border: 1px solid #000;
+  width: 50px;
+  height: 250px;
+}
+
+.bar .kilogram-20 {
+  background: radial-gradient(circle, #009ffd, #2a2a72);
+  margin-top: -100px;
+  border: 1px solid #000;
+  width: 45px;
+  height: 250px;
+}
+
+.bar .kilogram-15 {
+  background: radial-gradient(circle, #ffdd00, #fbb034);
+  margin-top: -100px;
+  border: 1px solid #000;
+  width: 40px;
+  height: 250px;
+}
+
+.bar .kilogram-10 {
+  background: radial-gradient(circle, #5aff15, #00b712);
+  margin-top: -100px;
+  border: 1px solid #000;
+  width: 35px;
+  height: 250px;
+}
+
+.bar .kilogram-5 {
+  background: radial-gradient(circle, #ffffff, #bbbbbb);
+  margin-top: -100px;
+  border: 1px solid #000;
+  width: 30px;
+  height: 250px;
+}
+
+.bar .kilogram-25-change {
+  background: radial-gradient(circle, #a71d31, #3f0d12);
+  margin-top: -50px;
+  border: 1px solid #000;
+  width: 25px;
+  height: 150px;
+}
+
+.bar .kilogram-20-change {
+  background: radial-gradient(circle, #009ffd, #2a2a72);
+  margin-top: -50px;
+  border: 1px solid #000;
+  width: 25px;
+  height: 150px;
+}
+
+.bar .kilogram-15-change {
+  background: radial-gradient(circle, #ffdd00, #fbb034);
+  margin-top: -50px;
+  border: 1px solid #000;
+  width: 25px;
+  height: 150px;
+}
+
+.bar .kilogram-10-change {
+  background: radial-gradient(circle, #5aff15, #00b712);
+  margin-top: -50px;
+  border: 1px solid #000;
+  width: 25px;
+  height: 150px;
+}
+
+.bar .kilogram-05-change {
+  background: radial-gradient(circle, #ffffff, #bbbbbb);
+  margin-top: -50px;
+  border: 1px solid #000;
+  width: 25px;
+  height: 150px;
+}

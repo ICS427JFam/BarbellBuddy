@@ -2,12 +2,12 @@ import React from 'react';
 import {
   HashRouter as Router, Redirect, Route, Switch,
 } from 'react-router-dom';
-import logo from './logo.svg';
 import './App.css';
 import BarbellCalculatorPage from './ui/pages/BarbellCalculatorPage';
 import LoginPage from './ui/pages/LoginPage';
 import Register from './ui/pages/Register';
 import LandingPage from './ui/pages/LandingPage';
+import 'semantic-ui-css/semantic.min.css';
 
 export const paths = {
   LOGIN: 'login',
