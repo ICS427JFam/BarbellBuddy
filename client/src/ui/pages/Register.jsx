@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import {
   Button, Divider, Segment, Grid, FormInput, Form,
 } from 'semantic-ui-react';
@@ -22,14 +23,36 @@ class Register extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  handleSubmit(e) {
+  async handleSubmit(e) {
     // call function here
     e.preventDefault();
     const {
       fname, lname, email, password, password2,
     } = this.state;
+    const user = {
+      fname,
+      lname,
+      email,
+      password,
+    };
+    let error = false;
     if (password === password2) {
-      // Encrypt password here
+      // Enter data here
+      // Check if email is already used.
+      const userList = await axios
+        .get('http://localhost:3001/userList');
+      for (let i = 0; i < userList.data.length; i += 1) {
+        if (userList.data[i].email === user.email) {
+          error = true;
+        }
+      }
+      // Email is not already in User collection.
+      if (error === false) {
+        axios
+          .post('http://localhost:3001/addUser', user)
+          .then(() => console.log('User created.'))
+          .catch((err) => console.log(err.message));
+      }
     } else {
       console.log('passwords dont match');
     }

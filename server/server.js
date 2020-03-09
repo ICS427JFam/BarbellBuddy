@@ -12,12 +12,14 @@ const router = express.Router();
 
 // this is our MongoDB database
 const dbRoute =
-  'mongodb+srv://BarbellBuddyDev:TeamGoguma@barbellbuddyserver-ytozr.azure.mongodb.net/test?retryWrites=true&w=majority';
+  'mongodb+srv://BarbellBuddyDev:TeamGoguma@barbellbuddyserver-ytozr.azure.mongodb.net/BarbellBuddy?retryWrites=true&w=majority';
 
 // connects our back end code with the database
 mongoose.connect(dbRoute, { useNewUrlParser: true, useUnifiedTopology: true  });
 
 let db = mongoose.connection;
+
+let users = mongoose.connection.collection('Users');
 
 db.once('open', () => console.log('connected to the database'));
 
@@ -32,7 +34,25 @@ app.use(logger('dev'));
 
 app.get('/', (req, res) => {
   res.send("Barbell Buddy Express Server");
+  console.log('hello');
 });
+
+app.post('/addUser', (req, res) => {
+  const newUser = {
+    firstName: req.body.fname,
+    lastName: req.body.lname,
+    email: req.body.email,
+    password: req.body.password,
+  }
+  const a = new User();
+  db.collection('Users').insertOne(newUser);
+  console.log('Inserted new user.');
+});
+
+app.get('/userList', async (req, res) => {
+  res.send(await users.find({}).toArray());
+});
+
 
 // append /api for our http requests
 app.use('/api', router);
