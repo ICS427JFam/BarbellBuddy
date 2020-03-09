@@ -4,7 +4,6 @@ import { Grid, Icon, Menu } from 'semantic-ui-react';
 const footerStyle = {
   height: '125px',
   backgroundColor: 'black',
-  position: 'fixed',
   bottom: 0,
   left: 0,
   width: '100%',

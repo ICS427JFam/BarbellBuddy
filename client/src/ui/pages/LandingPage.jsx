@@ -1,5 +1,5 @@
 import React from 'react';
-import NavBar from '../components/Shared/NavBar';
+import Footer from '../components/Shared/Footer';
 import {Image, Segment} from "semantic-ui-react";
 
 const divStyle = {
@@ -23,8 +23,14 @@ class LandingPage extends React.Component {
         </Segment>
 
         <Segment style={divStyle}>
+          <Image fluid src="https://raw.githubusercontent.com/ICS427JFam/BarbellBuddy/NavBar/client/public/landingDescription.png" />
+        </Segment>
+
+        <Segment style={divStyle}>
           <Image fluid src="https://raw.githubusercontent.com/ICS427JFam/BarbellBuddy/NavBar/client/public/landingCalc.png" />
         </Segment>
+
+        < Footer/>
       </div>
     );
   }
