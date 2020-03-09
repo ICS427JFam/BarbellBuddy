@@ -1,10 +1,9 @@
 import React from 'react';
-import { Grid, Icon, Menu } from 'semantic-ui-react';
+import { Grid, Icon } from 'semantic-ui-react';
 
 const footerStyle = {
   height: '125px',
-  backgroundColor: '#041E0C',
-  position: 'fixed',
+  backgroundColor: 'black',
   bottom: 0,
   left: 0,
   width: '100%',
