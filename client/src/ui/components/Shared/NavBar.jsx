@@ -1,8 +1,11 @@
 import React from 'react';
-import { Menu } from 'semantic-ui-react';
+import { Menu, Header, Image } from 'semantic-ui-react';
 
 const NavBar = () => (
   <div>
+    <Header>
+      Test
+    </Header>
     <Menu fluid widths={3}>
       <Menu.Item
         header="true"
