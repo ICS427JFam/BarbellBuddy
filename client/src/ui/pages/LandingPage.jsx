@@ -1,6 +1,6 @@
 import React from 'react';
 import Footer from '../components/Shared/Footer';
-import {Image, Segment} from "semantic-ui-react";
+import { Image, Segment, Menu, Button } from "semantic-ui-react";
 
 const divStyle = {
   padding: '0',
@@ -17,7 +17,18 @@ class LandingPage extends React.Component {
 
   render() {
     return (
-      <div>
+      <div style={divStyle}>
+
+        <Menu inverted style={divStyle}>
+          <Menu.Item>
+            <Button secondary compact>Sign up</Button>
+          </Menu.Item>
+
+          <Menu.Item>
+            <Button secondary compact>Log in</Button>
+          </Menu.Item>
+        </Menu>
+
         <Segment style={divStyle}>
           <Image fluid src="https://raw.githubusercontent.com/ICS427JFam/BarbellBuddy/NavBar/client/public/bbLogo.png" />
         </Segment>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Icon, Menu } from 'semantic-ui-react';
+import { Grid, Icon } from 'semantic-ui-react';
 
 const footerStyle = {
   height: '125px',
