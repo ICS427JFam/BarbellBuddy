@@ -10,9 +10,6 @@ const divStyle = {
 
 const NavBar = () => (
   <div>
-    <Segment style={divStyle}>
-      <Image fluid src="https://raw.githubusercontent.com/ICS427JFam/BarbellBuddy/NavBar/client/public/bbLogo.png" />
-    </Segment>
     <Menu inverted fluid widths={3} style={divStyle}>
       <Menu.Item
         header="true"
