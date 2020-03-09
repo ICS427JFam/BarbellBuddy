@@ -1,4 +1,5 @@
 import React from 'react';
+import NavBar from '../components/Shared/NavBar';
 
 class LandingPage extends React.Component {
   constructor(props) {
@@ -8,7 +9,10 @@ class LandingPage extends React.Component {
 
   render() {
     return (
-      <div>Hello Tysen</div>
+      <div>
+        <NavBar/>
+        meow
+      </div>
     );
   }
 }
