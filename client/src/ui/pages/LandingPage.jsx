@@ -21,8 +21,10 @@ class LandingPage extends React.Component {
         <Segment style={divStyle}>
           <Image fluid src="https://raw.githubusercontent.com/ICS427JFam/BarbellBuddy/NavBar/client/public/bbLogo.png" />
         </Segment>
-        <NavBar/>
-        meow
+
+        <Segment style={divStyle}>
+          <Image fluid src="https://raw.githubusercontent.com/ICS427JFam/BarbellBuddy/NavBar/client/public/landingCalc.png" />
+        </Segment>
       </div>
     );
   }
