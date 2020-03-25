@@ -44,6 +44,7 @@ class Register extends React.Component {
       for (let i = 0; i < userList.data.length; i += 1) {
         if (userList.data[i].email === user.email) {
           error = true;
+          alert('Email is already registered');
         }
       }
       // Email is not already in User collection.
@@ -76,7 +77,7 @@ class Register extends React.Component {
             </Form>
           </Grid.Column>
           <Grid.Column>
-            <Button style={{ margin: '13em 7em', padding: '1em 3em' }}>Register</Button>
+            <Button style={{ margin: '13em 7em', padding: '1em 3em' }}>Sign in</Button>
           </Grid.Column>
         </Grid>
         <Divider vertical>Or</Divider>
