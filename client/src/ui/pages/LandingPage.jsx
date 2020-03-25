@@ -1,5 +1,13 @@
 import React from 'react';
-import NavBar from '../components/Shared/NavBar';
+import Footer from '../components/Shared/Footer';
+import { Image, Segment, Menu, Button } from "semantic-ui-react";
+
+const divStyle = {
+  padding: '0',
+  margin: '0',
+  border: '0',
+  borderRadius: '0',
+};
 
 class LandingPage extends React.Component {
   constructor(props) {
@@ -9,9 +17,31 @@ class LandingPage extends React.Component {
 
   render() {
     return (
-      <div>
-        <NavBar/>
-        meow
+      <div style={divStyle}>
+
+        <Menu inverted style={divStyle}>
+          <Menu.Item>
+            <Button secondary compact>Sign up</Button>
+          </Menu.Item>
+
+          <Menu.Item>
+            <Button secondary compact>Log in</Button>
+          </Menu.Item>
+        </Menu>
+
+        <Segment style={divStyle}>
+          <Image fluid src="https://raw.githubusercontent.com/ICS427JFam/BarbellBuddy/NavBar/client/public/bbLogo.png" />
+        </Segment>
+
+        <Segment style={divStyle}>
+          <Image fluid src="https://raw.githubusercontent.com/ICS427JFam/BarbellBuddy/NavBar/client/public/landingDescription.png" />
+        </Segment>
+
+        <Segment style={divStyle}>
+          <Image fluid src="https://raw.githubusercontent.com/ICS427JFam/BarbellBuddy/NavBar/client/public/landingCalc.png" />
+        </Segment>
+
+        < Footer/>
       </div>
     );
   }
