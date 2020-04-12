@@ -82,7 +82,6 @@ class BarbellCalculatorPage extends React.Component {
       Swal.fire({
         title: 'Weight Input Exceeded Amount Available',
         icon: 'error',
-        type: 'error',
         html: `<p>Your weight input has exceeded the amount of weight available in your inventory!</p>
                <p>Total Weight Available (${this.unit}): ${weightAvailable} </p>`,
         allowOutsideClick: false,
@@ -95,7 +94,6 @@ class BarbellCalculatorPage extends React.Component {
       Swal.fire({
         title: 'Invalid Weight Input',
         icon: 'error',
-        type: 'error',
         html: `<p>Your weight input must be greater than the weight of the bar.
                <p>Bar Weight (${this.unit}): ${barWeight} </p>`,
         allowOutsideClick: false,
@@ -149,7 +147,6 @@ class BarbellCalculatorPage extends React.Component {
       Swal.fire({
         title: 'Weight Input Exceeded Amount Available',
         icon: 'info',
-        type: 'info',
         html: `Due to insufficient weight inventory, your weight input has been rounded down to ${weightInput - remainder} ${unit}`,
         timerProgressBar: true,
         timer: 5000,

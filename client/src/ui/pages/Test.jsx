@@ -184,16 +184,21 @@ class Test extends React.Component {
   }
 
   createUser() {
-    const newUser = {
-      fname: 'testuser',
-      lname: 'testUser',
-      email: 'email',
-      password: 'pass',
+    const user = {
+      'user': {
+        username: 'gcalica',
+        email: 'gcalica@hawaii.edu',
+        password: 'pass',
+      },
     };
     axios
-      .post('http://localhost:3001/addUser', newUser)
-      .then(() => console.log('User created.'))
-      .catch((err) => console.log(err.message));
+      .post('http://localhost:3001/api/users/users', user)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (err) {
+        console.log(err.message);
+      });
   }
 
   async updateFirstUser() {

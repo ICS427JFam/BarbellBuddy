@@ -8,21 +8,30 @@ const Bench = require('./bench');
 const Squat = require('./squat');
 const Deadlift = require('./deadlift');
 
-const API_PORT = 3001;
+ const API_PORT = 3001;
 const app = express();
 app.use(cors());
 const router = express.Router();
 
+// (optional) only made for logging and
+// bodyParser, parses the request body to be a readable json format
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(logger('dev'));
+
+app.use(require('method-override')());
+
 // this is our MongoDB database
 const dbRoute =
-  'mongodb+srv://BarbellBuddyDev:TeamGoguma@barbellbuddyserver-ytozr.azure.mongodb.net/BarbellBuddy?retryWrites=true&w=majority';
+  'mongodb+srv://Gian:A1B2C3D4F6@barbellbuddyserver-ytozr.azure.mongodb.net/test';
 
 // connects our back end code with the database
 mongoose.connect(dbRoute, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-
+// TODO: remove, debugging purposes only
+mongoose.set('debug', true);
 
 let db = mongoose.connection;
 
@@ -36,15 +45,14 @@ db.once('open', () => console.log('connected to the database'));
 // checks if connection with the database is successful
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-// (optional) only made for logging and
-// bodyParser, parses the request body to be a readable json format
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(logger('dev'));
+require('./models/User');
+require('./models/WeightInventory');
+require('./config/passport');
 
-app.get('/', (req, res) => {
-  res.send('Barbell Buddy Express Server');
-});
+app.use(require('./routes'));
+
+// launch our backend into a port
+app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
 
 // Instantiate a new User and their lifts
 app.post('/addUser', async (req, res) => {
@@ -237,13 +245,6 @@ app.put('/deleteUser', (req, res) => {
   console.log(`deleted ${userID}`);
 });
 
-// append /api for our http requests
-app.use('/api', router);
-
-// launch our backend into a port
-app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
-
-
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ///////////////////////// Server Helper Functions //////////////////////////////
@@ -276,3 +277,4 @@ async function makeID() {
   }
   return result;
 }
+
