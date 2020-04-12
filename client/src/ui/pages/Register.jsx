@@ -36,6 +36,7 @@ class Register extends React.Component {
       password,
     };
     let error = false;
+    // Check if passwords match
     if (password === password2) {
       // Enter data here
       // Check if email is already used.
@@ -49,6 +50,7 @@ class Register extends React.Component {
       }
       // Email is not already in User collection.
       if (error === false) {
+        console.log('no error');
         axios
           .post('http://localhost:3001/addUser', user)
           .then(() => console.log('User created.'))
@@ -68,11 +70,11 @@ class Register extends React.Component {
         <Grid columns={2} relaxed="very" stackable>
           <Grid.Column>
             <Form className="ui form" onSubmit={this.handleSubmit}>
-              <FormInput value={fname} onChange={this.onChange} name="fname" type="text" id="form" icon="user" iconPosition="left" label="First Name" placeholder="First Name" />
-              <FormInput value={lname} onChange={this.onChange} name="lname" icon="user" iconPosition="left" label="Last Name" placeholder="Last Name" />
-              <FormInput value={email} onChange={this.onChange} name="email" icon="mail" iconPosition="left" label="Email" placeholder="Email" />
-              <FormInput value={password} onChange={this.onChange} name="password" icon="lock" iconPosition="left" label="Password" placeholder="Password" />
-              <FormInput value={password2} onChange={this.onChange} name="password2" icon="lock" iconPosition="left" label="Confirm Password" placeholder="Password" />
+              <FormInput value={fname} onChange={this.onChange} name="fname" type="text" id="form" icon="user" iconPosition="left" label="First Name" placeholder="First Name"/>
+              <FormInput value={lname} onChange={this.onChange} name="lname" icon="user" iconPosition="left" label="Last Name" placeholder="Last Name"/>
+              <FormInput value={email} onChange={this.onChange} name="email" icon="mail" iconPosition="left" label="Email" placeholder="Email"/>
+              <FormInput value={password} onChange={this.onChange} name="password" icon="lock" iconPosition="left" label="Password" placeholder="Password"/>
+              <FormInput value={password2} onChange={this.onChange} name="password2" icon="lock" iconPosition="left" label="Confirm Password" placeholder="Password"/>
               <Button type="submit">Submit</Button>
             </Form>
           </Grid.Column>
