@@ -32,6 +32,8 @@
     "no-plusplus": "off",
     "quote-props": "off",
     "react/jsx-one-expression-per-line": "off",
-    "object-curly-newline": "off"
+    "object-curly-newline": "off",
+    "prefer-arrow-callback": "off",
+    "func-names": "off"
   }
 }

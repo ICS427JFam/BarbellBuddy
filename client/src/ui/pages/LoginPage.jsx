@@ -4,9 +4,6 @@ import {
   Container, Form, Grid, Header, Message, Segment,
 } from 'semantic-ui-react';
 import axios from 'axios';
-// TODO
-// eslint-disable-next-line import/no-cycle
-import { paths } from '../../App';
 import * as Swal from 'sweetalert2';
 
 export default class LoginPage extends React.Component {
@@ -37,7 +34,8 @@ export default class LoginPage extends React.Component {
           },
         },
       )
-      .then(() => {
+      .then((response) => {
+        window.localStorage.setItem('user-token', response.data.user.token);
         this.setState({ redirectToReferer: true });
       })
       .catch((err) => {
@@ -51,7 +49,7 @@ export default class LoginPage extends React.Component {
 
   render() {
     const { redirectToReferer } = this.state;
-    const pathname = `/${paths.CALCULATOR}`;
+    const pathname = '/calculator';
     const { from } = { from: { pathname } };
     // If user is authenthicated properly, redirect to the Barbell Calculator Page
     if (redirectToReferer) {

@@ -39,7 +39,6 @@ class Register extends React.Component {
         .post('http://localhost:3001/api/user/register', user)
         .then(() => console.log('User created.'))
         .catch((err) => console.log(err.message));
-      // }
     } else {
       Swal.fire({
         title: 'Passwords do not match',

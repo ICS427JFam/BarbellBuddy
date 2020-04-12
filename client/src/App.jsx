@@ -3,6 +3,9 @@ import {
   HashRouter as Router, Redirect, Route, Switch,
 } from 'react-router-dom';
 import './App.css';
+import axios from 'axios';
+import * as Swal from 'sweetalert2';
+import * as jwt from 'jsonwebtoken';
 import BarbellCalculatorPage from './ui/pages/BarbellCalculatorPage';
 import LoginPage from './ui/pages/LoginPage';
 import Register from './ui/pages/Register';
@@ -11,6 +14,7 @@ import Test from './ui/pages/Test';
 import 'semantic-ui-css/semantic.min.css';
 import NotFound from './ui/pages/NotFound';
 import WeightInventoryPage from './ui/pages/WeightInventoryPage';
+import Unauthorized from './ui/pages/Unauthorized';
 
 export const paths = {
   LOGIN: 'login',
@@ -18,6 +22,7 @@ export const paths = {
   CALCULATOR: 'calculator',
   TEST: 'test',
   INVENTORY: 'inventory',
+  UNAUTHORIZED: 'unauthorized',
 };
 
 const unprotectedRoutes = [
@@ -28,18 +33,23 @@ const unprotectedRoutes = [
   },
   {
     path: `/${paths.LOGIN}`,
-    exact: false,
+    exact: true,
     component: LoginPage,
   },
   {
     path: `/${paths.REGISTER}`,
-    exact: false,
+    exact: true,
     component: Register,
   },
   {
     path: `/${paths.TEST}`,
     exact: false,
     component: Test,
+  },
+  {
+    path: `/${paths.UNAUTHORIZED}`,
+    exact: true,
+    component: Unauthorized,
   },
 ];
 
@@ -63,7 +73,7 @@ const App = () => (
         <Route key={route.path} {...route} />
       ))}
       {protectedRoutes.map((route) => (
-        <Route key={route.path} {...route} /> // TODO Change to ProtectedRoute after Auth is implemented
+        <ProtectedRoute key={route.path} {...route} />
       ))}
       <Route component={NotFound}/>
     </Switch>
@@ -74,11 +84,32 @@ const ProtectedRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={(props) => {
-      // TODO: Auth
-      const isLoggedIn = false;
+      let isLoggedIn = false;
+      const userToken = window.localStorage.getItem('user-token');
+      // axios
+      //   .get('http://localhost:3001/api/user/', {
+      //     headers: {
+      //       Authorization: `Bearer ${userToken}`,
+      //     },
+      //   })
+      //   .then(function (response) {
+      //     console.log('response data user token ', response.data.user.token);
+      //     if (response.data.user.token !== undefined) {
+      //       isLoggedIn = true;
+      //     }
+      //   })
+      //   .catch(function (err) {
+      //     console.log(' err %o', err);
+      //   });
+      jwt.verify(userToken, 'secret', (err, data) => {
+        if (err) {
+          console.log(err);
+        }
+        isLoggedIn = true;
+      });
       return isLoggedIn
         ? (<Component {...props} />)
-        : (<Redirect to={{ pathname: `/${paths.LOGIN}`, state: { from: props.location } }} />);
+        : (<Redirect to={{ pathname: `/${paths.UNAUTHORIZED}`, state: { from: props.location } }}/>);
     }}
   />
 );

@@ -19,6 +19,7 @@ import Pound10Plate from '../components/BarbellCalculator/PoundWeights/Pound10Pl
 import Pound5Change from '../components/BarbellCalculator/PoundWeights/Pound5Change';
 import Pound25Change from '../components/BarbellCalculator/PoundWeights/Pound25Change';
 import Footer from '../components/Shared/Footer';
+import NavBar from '../components/Shared/NavBar';
 
 class BarbellCalculatorPage extends React.Component {
   constructor(props) {
@@ -256,6 +257,7 @@ class BarbellCalculatorPage extends React.Component {
     const { unit } = this;
     return (
       <>
+        <NavBar/>
         <Container textAlign="center" style={{ marginTop: 100 }}>
           <Header>Input Weight ({unit})</Header>
           <Form onSubmit={this.handleSubmit} style={{ maxWidth: 300, margin: 'auto' }}>

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Header } from 'semantic-ui-react';
 
-const NotFound = () => (
+const Unauthorized = () => (
   <Header as="h1" textAlign="center">
-    <p>Page not found</p>
+    <p>You are not authorized to view this page.</p>
   </Header>
 );
 
-export default NotFound;
+export default Unauthorized;

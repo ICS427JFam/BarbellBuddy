@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const express = require('express');
-var cors = require('cors');
+const  cors = require('cors');
+const session = require('express-session');
+const passport = require('passport');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const User = require('./user');
@@ -20,6 +22,10 @@ app.use(bodyParser.json());
 app.use(logger('dev'));
 
 app.use(require('method-override')());
+app.use(express.static(__dirname + '/public'));
+// app.use(session({ secret: 'secret', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false  }));
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // this is our MongoDB database
 const dbRoute =
@@ -50,6 +56,23 @@ require('./models/WeightInventory');
 require('./config/passport');
 
 app.use(require('./routes'));
+
+app.use(function(req, res, next) {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+app.use(function(err, req, res, next) {
+  console.log(err.stack);
+
+  res.status(err.status || 500);
+
+  res.json({'errors': {
+      message: err.message,
+      error: err
+    }});
+});
 
 // launch our backend into a port
 app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
