@@ -7,6 +7,7 @@ import BarbellCalculatorPage from './ui/pages/BarbellCalculatorPage';
 import LoginPage from './ui/pages/LoginPage';
 import Register from './ui/pages/Register';
 import LandingPage from './ui/pages/LandingPage';
+import Test from './ui/pages/Test';
 import 'semantic-ui-css/semantic.min.css';
 import NotFound from './ui/pages/NotFound';
 import WeightInventoryPage from './ui/pages/WeightInventoryPage';
@@ -15,6 +16,7 @@ export const paths = {
   LOGIN: 'login',
   REGISTER: 'register',
   CALCULATOR: 'calculator',
+  TEST: 'test',
   INVENTORY: 'inventory',
 };
 
@@ -33,6 +35,11 @@ const unprotectedRoutes = [
     path: `/${paths.REGISTER}`,
     exact: false,
     component: Register,
+  },
+  {
+    path: `/${paths.TEST}`,
+    exact: false,
+    component: Test,
   },
 ];
 
