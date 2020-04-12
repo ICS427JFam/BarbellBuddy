@@ -10,12 +10,14 @@ import LandingPage from './ui/pages/LandingPage';
 import Test from './ui/pages/Test';
 import 'semantic-ui-css/semantic.min.css';
 import NotFound from './ui/pages/NotFound';
+import WeightInventoryPage from './ui/pages/WeightInventoryPage';
 
 export const paths = {
   LOGIN: 'login',
   REGISTER: 'register',
   CALCULATOR: 'calculator',
   TEST: 'test',
+  INVENTORY: 'inventory',
 };
 
 const unprotectedRoutes = [
@@ -46,6 +48,11 @@ const protectedRoutes = [
     path: `/${paths.CALCULATOR}`,
     exact: true,
     component: BarbellCalculatorPage,
+  },
+  {
+    path: `/${paths.INVENTORY}`,
+    exact: true,
+    component: WeightInventoryPage,
   },
 ];
 

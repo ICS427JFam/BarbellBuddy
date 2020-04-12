@@ -27,9 +27,9 @@ class BarbellCalculatorPage extends React.Component {
       weightInput: '',
       outputWeightsArr: [],
       outputMultipliersArr: [],
-      remainderAmount: 0,
+      // remainderAmount: 0, TODO: (Low Priority) Show remainder amount
     };
-    // TODO: These constants should be fetched from API
+    // TODO: (High priority) These constants should be fetched from API
     this.unit = 'pounds'; // kilograms or pounds (with the s)
     this.barType = 'men'; // men or women
     if (this.unit === 'kilograms') {
@@ -67,20 +67,16 @@ class BarbellCalculatorPage extends React.Component {
         '2.5': 2,
       };
     }
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.calculateWeightAvailable = this.calculateWeightAvailable.bind(this);
-    this.calculateWeights = this.calculateWeights.bind(this);
-    this.renderKilogramPlates = this.renderKilogramPlates.bind(this);
   }
 
-  handleChange(e, { name, value }) {
+  handleChange = (e, { name, value }) => {
     this.setState({ [name]: value });
-  }
+  };
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
     const { weightInput } = this.state;
+    const { barWeight } = this;
     const weightAvailable = this.calculateWeightAvailable();
     if (weightInput > weightAvailable) {
       Swal.fire({
@@ -95,10 +91,23 @@ class BarbellCalculatorPage extends React.Component {
       });
       return;
     }
+    if (weightInput <= barWeight) {
+      Swal.fire({
+        title: 'Invalid Weight Input',
+        icon: 'error',
+        type: 'error',
+        html: `<p>Your weight input must be greater than the weight of the bar.
+               <p>Bar Weight (${this.unit}): ${barWeight} </p>`,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+      });
+      return;
+    }
     this.calculateWeights(parseInt(weightInput, 10));
-  }
+  };
 
-  calculateWeightAvailable() {
+  calculateWeightAvailable = () => {
     const { plateInventory } = this;
     const weights = Object.keys(plateInventory);
     const multipliers = Object.values(plateInventory);
@@ -108,9 +117,9 @@ class BarbellCalculatorPage extends React.Component {
     }
     result += this.barWeight;
     return result;
-  }
+  };
 
-  calculateWeights(weightInput) {
+  calculateWeights = (weightInput) => {
     const {
       barWeight, plates, plateInventory, unit,
     } = this;
@@ -147,9 +156,9 @@ class BarbellCalculatorPage extends React.Component {
       });
     }
     this.setState({ outputWeightsArr: retWeightArr, outputMultipliersArr: retMultiplierArr });
-  }
+  };
 
-  renderKilogramPlates() {
+  renderKilogramPlates = () => {
     const { outputWeightsArr, outputMultipliersArr } = this.state;
     const ret = [];
     for (let i = 0; i < outputWeightsArr.length; i++) {
@@ -205,9 +214,9 @@ class BarbellCalculatorPage extends React.Component {
       }
     }
     return ret;
-  }
+  };
 
-  renderPoundPlates() {
+  renderPoundPlates = () => {
     const { outputWeightsArr, outputMultipliersArr } = this.state;
     const ret = [];
     for (let i = 0; i < outputWeightsArr.length; i++) {
@@ -243,7 +252,7 @@ class BarbellCalculatorPage extends React.Component {
       }
     }
     return ret;
-  }
+  };
 
   render() {
     const { weightInput, outputWeightsArr, outputMultipliersArr } = this.state;
