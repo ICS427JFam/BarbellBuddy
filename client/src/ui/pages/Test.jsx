@@ -77,9 +77,7 @@ class Test extends React.Component {
     const fuser = userList.data[0];
     const squatList = await axios
       .get('http://localhost:3001/squatList');
-    const fsquat = squatList.data.find((squat) => {
-      return squat.uid === fuser.uid;
-    });
+    const fsquat = squatList.data.find((squat) => squat.uid === fuser.uid);
     fsquat.unit = 'lb';
     fsquat.barType = 'Olympic';
     fsquat.kgInventory = {
@@ -114,9 +112,7 @@ class Test extends React.Component {
     const fuser = userList.data[0];
     const deadliftList = await axios
       .get('http://localhost:3001/deadliftList');
-    const fdeadlift = deadliftList.data.find((dlift) => {
-      return dlift.uid === fuser.uid;
-    });
+    const fdeadlift = deadliftList.data.find((dlift) => dlift.uid === fuser.uid);
     fdeadlift.unit = 'lb';
     fdeadlift.barType = 'Olympic';
     fdeadlift.kgInventory = {
@@ -151,9 +147,7 @@ class Test extends React.Component {
     const fuser = userList.data[0];
     const benchList = await axios
       .get('http://localhost:3001/benchList');
-    const fbench = benchList.data.find((bench) => {
-      return bench.uid === fuser.uid;
-    });
+    const fbench = benchList.data.find((bench) => bench.uid === fuser.uid);
     fbench.unit = 'lb';
     fbench.barType = 'Olympic';
     fbench.kgInventory = {
