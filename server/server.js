@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const express = require('express');
-var cors = require('cors');
+const  cors = require('cors');
+const session = require('express-session');
+const passport = require('passport');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const User = require('./user');
@@ -8,21 +10,34 @@ const Bench = require('./bench');
 const Squat = require('./squat');
 const Deadlift = require('./deadlift');
 
-const API_PORT = 3001;
+ const API_PORT = 3001;
 const app = express();
 app.use(cors());
 const router = express.Router();
 
+// (optional) only made for logging and
+// bodyParser, parses the request body to be a readable json format
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(logger('dev'));
+
+app.use(require('method-override')());
+app.use(express.static(__dirname + '/public'));
+// app.use(session({ secret: 'secret', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false  }));
+// app.use(passport.initialize());
+// app.use(passport.session());
+
 // this is our MongoDB database
 const dbRoute =
-  'mongodb+srv://BarbellBuddyDev:TeamGoguma@barbellbuddyserver-ytozr.azure.mongodb.net/BarbellBuddy?retryWrites=true&w=majority';
+  'mongodb+srv://Gian:A1B2C3D4F6@barbellbuddyserver-ytozr.azure.mongodb.net/test';
 
 // connects our back end code with the database
 mongoose.connect(dbRoute, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-
+// TODO: remove, debugging purposes only
+mongoose.set('debug', true);
 
 let db = mongoose.connection;
 
@@ -36,14 +51,30 @@ db.once('open', () => console.log('connected to the database'));
 // checks if connection with the database is successful
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-// (optional) only made for logging and
-// bodyParser, parses the request body to be a readable json format
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(logger('dev'));
+// launch our backend into a port
+app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
 
-app.get('/', (req, res) => {
-  res.send('Barbell Buddy Express Server');
+require('./models/User');
+require('./models/WeightInventory');
+require('./config/passport');
+
+app.use(require('./routes'));
+
+app.use(function(req, res, next) {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+app.use(function(err, req, res, next) {
+  console.log(err.stack);
+
+  res.status(err.status || 500);
+
+  res.json({'errors': {
+      message: err.message,
+      error: err
+    }});
 });
 
 // Instantiate a new User and their lifts
@@ -237,13 +268,6 @@ app.put('/deleteUser', (req, res) => {
   console.log(`deleted ${userID}`);
 });
 
-// append /api for our http requests
-app.use('/api', router);
-
-// launch our backend into a port
-app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
-
-
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ///////////////////////// Server Helper Functions //////////////////////////////
@@ -276,3 +300,4 @@ async function makeID() {
   }
   return result;
 }
+
