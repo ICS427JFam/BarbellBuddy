@@ -1,6 +1,8 @@
 import React from 'react';
 import { Container, Form, Header } from 'semantic-ui-react';
+import axios from 'axios';
 import Swal from 'sweetalert2/dist/sweetalert2.all.min';
+import * as jwt from 'jsonwebtoken';
 import Barbell from '../components/BarbellCalculator/Barbell';
 import Kilogram25Plate from '../components/BarbellCalculator/KilogramWeights/Kilogram25Plate';
 import Kilogram25Change from '../components/BarbellCalculator/KilogramWeights/Kilogram25Change';
@@ -28,6 +30,7 @@ class BarbellCalculatorPage extends React.Component {
       weightInput: '',
       outputWeightsArr: [],
       outputMultipliersArr: [],
+      weightInventory: [],
       // remainderAmount: 0, TODO: (Low Priority) Show remainder amount
     };
     // TODO: (High priority) These constants should be fetched from API
@@ -68,6 +71,29 @@ class BarbellCalculatorPage extends React.Component {
         '2.5': 2,
       };
     }
+  }
+
+  componentDidMount() {
+    const comp = this;
+    const userToken = window.localStorage.getItem('user-token');
+    jwt.verify(userToken, 'secret', (err, data) => {
+      if (err) {
+        console.log(err);
+      }
+      axios
+        .get(`http://localhost:3001/api/weightInventory/${data.username}`, {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        })
+        .then(function (response) {
+          console.log(response.data);
+          comp.setState({ weightInventory: response.data.weightInventory });
+        })
+        .catch(function (err2) {
+          console.log(err2);
+        });
+    });
   }
 
   handleChange = (e, { name, value }) => {
@@ -291,7 +317,7 @@ class BarbellCalculatorPage extends React.Component {
         <Container textAlign="center" style={{ marginTop: 50 }}>
           <Header as="h1">Plates PER SIDE</Header>
           {outputWeightsArr.map((weight, index) => (outputMultipliersArr[index] !== 0
-            ? <Header as="h3">{weight} {unit} x{outputMultipliersArr[index]}</Header>
+            ? <Header key={index} as="h3">{weight} {unit} x{outputMultipliersArr[index]}</Header>
             : ''))}
         </Container>
 

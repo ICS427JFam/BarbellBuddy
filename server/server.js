@@ -51,6 +51,9 @@ db.once('open', () => console.log('connected to the database'));
 // checks if connection with the database is successful
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+// launch our backend into a port
+app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
+
 require('./models/User');
 require('./models/WeightInventory');
 require('./config/passport');
@@ -73,9 +76,6 @@ app.use(function(err, req, res, next) {
       error: err
     }});
 });
-
-// launch our backend into a port
-app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
 
 // Instantiate a new User and their lifts
 app.post('/addUser', async (req, res) => {
