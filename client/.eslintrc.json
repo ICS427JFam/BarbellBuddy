@@ -25,7 +25,7 @@
   "rules": {
     "linebreak-style": "off",
     "max-len": "off",
-    "no-console": "warn",
+    "no-console": "off",
     "react/jsx-props-no-spreading": "off",
     "no-unused-vars": "warn",
     "react/jsx-tag-spacing": "off",

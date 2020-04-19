@@ -33,9 +33,9 @@ import * as TYPES from './types';
 //       '10': inventory.kgInventory['10'],
 //       '5': inventory.kgInventory['5'],
 //       '2_5': inventory.kgInventory['2_5'],
-//       '2_0': inventory.kgInventory['2_0'],
+//       '2_0': inventory.kgInventory['2'],
 //       '1_5': inventory.kgInventory['1_5'],
-//       '1_0': inventory.kgInventory['1_0'],
+//       '1_0': inventory.kgInventory['1'],
 //       '0_5': inventory.kgInventory['0_5'],
 //     },
 //     pounds: {
@@ -57,9 +57,9 @@ const initialState = {
     '10': 0,
     '5': 0,
     '2_5': 0,
-    '2_0': 0,
+    '2': 0,
     '1_5': 0,
-    '1_0': 0,
+    '1': 0,
     '0_5': 0,
   },
   pounds: {
@@ -139,7 +139,7 @@ function reducer(state = initialState, action) {
         ...state,
         kilograms: {
           ...kilogramsState,
-          '2_0': action.payload,
+          '2': action.payload,
         },
       };
       return s;
@@ -157,7 +157,7 @@ function reducer(state = initialState, action) {
         ...state,
         kilograms: {
           ...kilogramsState,
-          '1_0': action.payload,
+          '1': action.payload,
         },
       };
       return s;
