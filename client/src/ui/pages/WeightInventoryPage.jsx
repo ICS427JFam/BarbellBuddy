@@ -82,21 +82,25 @@ class WeightInventoryPage extends React.Component {
               <Grid centered columns={5}>
                 <Grid.Row>
                   <Label.Group circular size="massive">
-                    <PlateIndicator color={redColor} weight={25}/>
-                    <PlateIndicator color={blueColor} weight={20}/>
-                    <PlateIndicator color={yellowColor} weight={15}/>
-                    <PlateIndicator color={greenColor} weight={10}/>
-                    <PlateIndicator weight={5}/>
+                    <Menu borderless text>
+                      <PlateIndicator color={redColor} weight={25}/>
+                      <PlateIndicator color={blueColor} weight={20}/>
+                      <PlateIndicator color={yellowColor} weight={15}/>
+                      <PlateIndicator color={greenColor} weight={10}/>
+                      <PlateIndicator weight={5}/>
+                    </Menu>
                   </Label.Group>
                 </Grid.Row>
 
                 <Grid.Row>
                   <Label.Group circular size="massive">
-                    <PlateIndicator color={redColor} weight={2.5}/>
-                    <PlateIndicator color={blueColor} weight={2.0}/>
-                    <PlateIndicator color={yellowColor} weight={1.5}/>
-                    <PlateIndicator color={greenColor} weight={1.0}/>
-                    <PlateIndicator weight={0.5}/>
+                    <Menu borderless text>
+                      <PlateIndicator color={redColor} weight={2.5}/>
+                      <PlateIndicator color={blueColor} weight={2.0}/>
+                      <PlateIndicator color={yellowColor} weight={1.5}/>
+                      <PlateIndicator color={greenColor} weight={1.0}/>
+                      <PlateIndicator weight={0.5}/>
+                    </Menu>
                   </Label.Group>
                 </Grid.Row>
               </Grid>
@@ -105,17 +109,21 @@ class WeightInventoryPage extends React.Component {
               <Grid centered columns={3}>
                 <Grid.Row>
                   <Label.Group circular size="massive">
-                    <PlateIndicator color={blueColor} weight={45}/>
-                    <PlateIndicator color={yellowColor} weight={35}/>
-                    <PlateIndicator color={greenColor} weight={25}/>
+                    <Menu borderless text>
+                      <PlateIndicator color={blueColor} weight={45}/>
+                      <PlateIndicator color={yellowColor} weight={35}/>
+                      <PlateIndicator color={greenColor} weight={25}/>
+                    </Menu>
                   </Label.Group>
                 </Grid.Row>
 
                 <Grid.Row>
                   <Label.Group circular size="massive">
-                    <PlateIndicator color={blackColor} weight={10}/>
-                    <PlateIndicator weight={5}/>
-                    <PlateIndicator color={redColor} weight={2.5}/>
+                    <Menu borderless text>
+                      <PlateIndicator color={blackColor} weight={10}/>
+                      <PlateIndicator weight={5}/>
+                      <PlateIndicator color={redColor} weight={2.5}/>
+                    </Menu>
                   </Label.Group>
                 </Grid.Row>
               </Grid>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Statistic } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 
 class InventoryButtonGroup extends React.Component {
   constructor(props) {
@@ -7,11 +7,16 @@ class InventoryButtonGroup extends React.Component {
   }
 
   render() {
+    const buttonGroupStyle = {
+      paddingTop: 5,
+    };
     return (
       <>
-        <Button>-</Button>
-        <Statistic>X</Statistic>
-        <Button>+</Button>
+        <Button.Group style={buttonGroupStyle}>
+          <Button>-</Button>
+          <Button>X</Button>
+          <Button>+</Button>
+        </Button.Group>
       </>
     );
   }
