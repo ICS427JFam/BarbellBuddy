@@ -1,6 +1,8 @@
 import React from 'react';
+import {
+  Image, Segment, Menu, Button,
+} from 'semantic-ui-react';
 import Footer from '../components/Shared/Footer';
-import { Image, Segment, Menu, Button } from "semantic-ui-react";
 
 const divStyle = {
   padding: '0',

@@ -9,11 +9,13 @@ import Register from './ui/pages/Register';
 import LandingPage from './ui/pages/LandingPage';
 import 'semantic-ui-css/semantic.min.css';
 import NotFound from './ui/pages/NotFound';
+import Converter from './ui/pages/Converter';
 
 export const paths = {
   LOGIN: 'login',
   REGISTER: 'register',
   CALCULATOR: 'calculator',
+  CONVERTER: 'converter',
 };
 
 const unprotectedRoutes = [
@@ -39,6 +41,11 @@ const protectedRoutes = [
     path: `/${paths.CALCULATOR}`,
     exact: true,
     component: BarbellCalculatorPage,
+  },
+  {
+    path: `/${paths.CONVERTER}`,
+    exact: true,
+    component: Converter,
   },
 ];
 
