@@ -4,6 +4,7 @@ const router = require('express').Router();
 const passport = require('passport');
 const auth = require('../auth');
 const User = mongoose.model('User');
+const WeightInventory = mongoose.model('WeightInventory');
 
 // TODO: remove, debugging purposes only
 router.get('/allUsers', function (req, res, next) {
@@ -75,12 +76,14 @@ router.post('/login', function (req, res, next) {
     return res.status(422).json({ errors: { password: "can't be blank" } });
   }
 
-  passport.authenticate('local', {session: false}, function(err, user, info){
-    if(err){ return next(err); }
+  passport.authenticate('local', { session: false }, function (err, user, info) {
+    if (err) {
+      return next(err);
+    }
 
-    if(user){
+    if (user) {
       user.token = user.generateJWT();
-      return res.json({user: user.toAuthJSON()});
+      return res.json({ user: user.toAuthJSON() });
     } else {
       return res.status(422).json(info);
     }
@@ -96,8 +99,39 @@ router.post('/register', function (req, res, next) {
   user.email = req.body.user.email;
   user.setPassword(req.body.user.password);
 
-  user.save().then(function () {
-    return res.json({ user: user.toAuthJSON() });
+  const newUser = user.save().then(function () {
+    const defaultWeightInventory = {
+        userID: user.username,
+        unit: "kilograms",
+        barType: "men",
+        kgInventory: {
+          "25": 2,
+          "20": 2,
+          "15": 2,
+          "10": 2,
+          "5": 2,
+          "2_5": 2,
+          "2": 2,
+          "1_5": 2,
+          "1": 2,
+          "0_5": 2
+        },
+        lbInventory: {
+          "45": 6,
+          "35": 2,
+          "25": 2,
+          "10": 2,
+          "5": 2,
+          "2_5": 2
+        }
+    };
+    const weightInventory = new WeightInventory(defaultWeightInventory);
+    const jsonReturn = {};
+    jsonReturn.user = user.toAuthJSON();
+    weightInventory.save().then(function () {
+      jsonReturn.weightInventory = weightInventory.toAuthJSON();
+    });
+    return res.json(jsonReturn);
   }).catch(next);
 });
 

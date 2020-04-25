@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Form, Header } from 'semantic-ui-react';
+import { Container, Form, Header, Dropdown } from 'semantic-ui-react';
 import axios from 'axios';
 import Swal from 'sweetalert2/dist/sweetalert2.all.min';
 import * as jwt from 'jsonwebtoken';
@@ -31,7 +31,7 @@ class BarbellCalculatorPage extends React.Component {
       outputWeightsArr: [],
       outputMultipliersArr: [],
       weightInventory: [],
-      // remainderAmount: 0, TODO: (Low Priority) Show remainder amount
+      unit: 'kilograms',
     };
   }
 
@@ -72,8 +72,8 @@ class BarbellCalculatorPage extends React.Component {
     return 35;
   };
 
-  getPlateInventory = (weightInventory) => {
-    if (weightInventory.unit === 'kilograms') {
+  getPlateInventory = (weightInventory, unit) => {
+    if (unit === 'kilograms') {
       return weightInventory.kgInventory;
     }
     return weightInventory.lbInventory;
@@ -90,11 +90,22 @@ class BarbellCalculatorPage extends React.Component {
     this.setState({ [name]: value });
   };
 
+  handleDropdownChange = (e, { value }) => {
+    this.setState(
+      {
+        unit: value,
+        outputWeightsArr: [],
+        outputMultipliersArr: [],
+        weightInput: '',
+      },
+    );
+  };
+
   handleSubmit = (e) => {
     e.preventDefault();
-    const { weightInput, weightInventory } = this.state;
-    const { unit } = weightInventory;
-    const barWeight = this.getBarWeight(weightInventory.barType, weightInventory.unit);
+    const { weightInput, weightInventory, unit } = this.state;
+    // const { unit } = weightInventory;
+    const barWeight = this.getBarWeight(weightInventory.barType, unit);
     const weightAvailable = this.calculateWeightAvailable();
     if (weightInput > weightAvailable) {
       Swal.fire({
@@ -124,9 +135,9 @@ class BarbellCalculatorPage extends React.Component {
   };
 
   calculateWeightAvailable = () => {
-    const { weightInventory } = this.state;
-    const barWeight = this.getBarWeight(weightInventory.barType, weightInventory.unit);
-    const plateInventory = this.getPlateInventory(weightInventory);
+    const { weightInventory, unit } = this.state;
+    const barWeight = this.getBarWeight(weightInventory.barType, unit);
+    const plateInventory = this.getPlateInventory(weightInventory, unit);
     // FIXME the logic of this
     // Problem is that we separate the keys and values of plateInventory into weights and multipliers, respectively
     // Unfortunately weights is not guaranteed in order because of the fact that the keys that come from the
@@ -151,11 +162,11 @@ class BarbellCalculatorPage extends React.Component {
   };
 
   calculateWeights = (weightInput) => {
-    const { weightInventory } = this.state;
-    const barWeight = this.getBarWeight(weightInventory.barType, weightInventory.unit);
-    const plates = this.getPlates(weightInventory.unit);
+    const { weightInventory, unit } = this.state;
+    const barWeight = this.getBarWeight(weightInventory.barType, unit);
+    const plates = this.getPlates(unit);
     const plateInventory = this.getPlateInventory(weightInventory);
-    const { unit } = weightInventory;
+    // const { unit } = weightInventory;
     const actualWeight = weightInput - barWeight;
     let remain = actualWeight / 2;
     const retWeightArr = [];
@@ -287,13 +298,33 @@ class BarbellCalculatorPage extends React.Component {
   };
 
   render() {
-    const { weightInput, outputWeightsArr, outputMultipliersArr, weightInventory } = this.state;
-    const { unit } = weightInventory;
+    const { weightInput, outputWeightsArr, outputMultipliersArr, unit } = this.state;
+    // const { unit } = weightInventory;
+    const dropdownOptions = [
+      {
+        key: 'kilograms',
+        text: 'Kilograms (kgs)',
+        value: 'kilograms',
+      },
+      {
+        key: 'pounds',
+        text: 'Pounds (lbs)',
+        value: 'pounds',
+      },
+    ];
+    const dropShadowStyle = {
+      filter: 'drop-shadow(0 0 0.75rem black)',
+    };
     return (
       <>
         <NavBar/>
         <Container textAlign="center" style={{ marginTop: 100 }}>
-          <Header>Input Weight ({unit})</Header>
+          <Header as="h1" style={dropShadowStyle}>Barbell Calculator</Header>
+          <Dropdown
+            defaultValue={unit}
+            onChange={this.handleDropdownChange}
+            options={dropdownOptions}
+          />
           <Form onSubmit={this.handleSubmit} style={{ maxWidth: 300, margin: 'auto' }}>
             <Form.Input
               name="weightInput"

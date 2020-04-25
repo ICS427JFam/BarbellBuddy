@@ -3,8 +3,7 @@ import {
   HashRouter as Router, Redirect, Route, Switch,
 } from 'react-router-dom';
 import './App.css';
-import axios from 'axios';
-import * as Swal from 'sweetalert2';
+// import axios from 'axios';
 import * as jwt from 'jsonwebtoken';
 import BarbellCalculatorPage from './ui/pages/BarbellCalculatorPage';
 import LoginPage from './ui/pages/LoginPage';

@@ -16,8 +16,8 @@ router.param('username', function (req, res, next, query) {
 
 router.get('/:username', auth.required, function (req, res, next) {
   // req.body.weightInventory.userID
-  WeightInventory.find({ userID: req.params.username }).then(function (weightInventory) {
-    return res.json({ weightInventory: weightInventory[0].toAuthJSON() });
+  WeightInventory.findOne({ userID: req.params.username }).then(function (weightInventory) {
+    return res.json({ weightInventory: weightInventory.toAuthJSON() });
   }).catch(next);
 });
 
@@ -42,11 +42,11 @@ router.put('/:username', auth.required, function (req, res, next) {
       return res.sendStatus(401);
     }
 
-    WeightInventory.find({ userID: user.username }, function (err, inventory) {
+    WeightInventory.findOne({ userID: user.username }, function (err, inventory) {
       if (err) {
         next(err);
       }
-      const weightInventory = inventory[0];
+      const weightInventory = inventory;
 
       if (typeof req.body.weightInventory.unit !== 'undefined') {
         weightInventory.unit = req.body.weightInventory.unit;
