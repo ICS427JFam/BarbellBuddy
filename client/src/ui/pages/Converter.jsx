@@ -3,7 +3,8 @@ import 'semantic-ui-css/semantic.min.css';
 import {
   Form, Container, Header, Button,
 } from 'semantic-ui-react';
-
+import NavBar from '../components/Shared/NavBar';
+import Footer from '../components/Shared/Footer';
 
 class Converter extends React.Component {
   constructor(props) {
@@ -12,67 +13,74 @@ class Converter extends React.Component {
       lbs: '',
       kgs: '',
     };
+    this.handlePounds = this.handlePounds.bind(this);
+    this.handleKilos = this.handleKilos.bind(this);
   }
 
-  handlePounds = e => {
+  handlePounds(e) {
+    e.preventDefault();
     const lbs = e.target.value;
-
     this.setState({
       lbs,
       kgs: Number(lbs * 0.45359237).toFixed(2),
     });
 
     if (lbs === '') {
-      this.setState({lbs: 0});
+      this.setState({ kgs: '' });
     }
-  };
+  }
 
-  handleKilos = e => {
+  handleKilos(e) {
+    e.preventDefault();
     const kgs = e.target.value;
-
     this.setState({
       kgs,
       lbs: Number(kgs / 0.45359237).toFixed(2),
     });
 
     if (kgs === '') {
-      this.setState(this.state);
+      this.setState({ lbs: '' });
     }
-  };
-
-  handleReset = () => {
-    this.setState({lbs: '', kgs: ''});
-  };
+  }
 
   render() {
+    const { lbs, kgs } = this.state;
+    const containerStyle = {
+      padding: '1em',
+      paddingBottom: '32px',
+      maxWidth: '100px',
+      margin: '2em auto',
+    };
     return (
-      <Container style={{
-        padding: '1em', paddingBottom: '32px', maxWidth: '100px', margin: '2em auto',
-      }}
-      >
-        <Header as="h2">Weight Converter</Header>
-        <Form width="200">
-          <Form.Field>
-            <label htmlFor="Pounds">Pound (lb)</label>
-            <input
-              id="lbInput"
-              placeholder="Enter pounds"
-              value={this.state.lbs}
-              onChange={this.handlePounds}
-            />
-          </Form.Field>
-          <Form.Field>
-            <label htmlFor="Kilograms">Kilogram (kg)</label>
-            <input
-              id="kgInput"
-              placeholder="Enter kilograms"
-              value={this.state.kgs}
-              onChange={this.handleKilos}
-            />
-          </Form.Field>
-          <Button onClick={this.handleReset}>Clear</Button>
-        </Form>
-      </Container>
+      <>
+        <NavBar/>
+        <Container style={containerStyle}>
+          <Header as="h1" textAlign="center">Weight Converter</Header>
+          <Form>
+            <Form.Group widths="equal">
+              <Form.Field>
+                <Form.Input
+                  name="lbInput"
+                  label="Pounds (lb)"
+                  placeholder="Enter pounds"
+                  value={lbs}
+                  onChange={this.handlePounds}
+                />
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  name="kgInput"
+                  label="Kilograms (kg)"
+                  placeholder="Enter kilograms"
+                  value={kgs}
+                  onChange={this.handleKilos}
+                />
+              </Form.Field>
+            </Form.Group>
+          </Form>
+        </Container>
+        <Footer/>
+      </>
     );
   }
 }
