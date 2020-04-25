@@ -3,15 +3,14 @@ import {
   HashRouter as Router, Redirect, Route, Switch,
 } from 'react-router-dom';
 import './App.css';
-// import axios from 'axios';
 import * as jwt from 'jsonwebtoken';
 import BarbellCalculatorPage from './ui/pages/BarbellCalculatorPage';
 import LoginPage from './ui/pages/LoginPage';
 import Register from './ui/pages/Register';
 import LandingPage from './ui/pages/LandingPage';
-import Test from './ui/pages/Test';
 import 'semantic-ui-css/semantic.min.css';
 import NotFound from './ui/pages/NotFound';
+import Converter from './ui/pages/Converter';
 import WeightInventoryPage from './ui/pages/WeightInventoryPage';
 import Unauthorized from './ui/pages/Unauthorized';
 
@@ -19,7 +18,7 @@ export const paths = {
   LOGIN: 'login',
   REGISTER: 'register',
   CALCULATOR: 'calculator',
-  TEST: 'test',
+  CONVERTER: 'converter',
   INVENTORY: 'inventory',
   UNAUTHORIZED: 'unauthorized',
 };
@@ -41,11 +40,6 @@ const unprotectedRoutes = [
     component: Register,
   },
   {
-    path: `/${paths.TEST}`,
-    exact: false,
-    component: Test,
-  },
-  {
     path: `/${paths.UNAUTHORIZED}`,
     exact: true,
     component: Unauthorized,
@@ -63,6 +57,11 @@ const protectedRoutes = [
     exact: true,
     component: WeightInventoryPage,
   },
+  {
+    path: `/${paths.CONVERTER}`,
+    exact: true,
+    component: Converter,
+  },
 ];
 
 const App = () => (
@@ -79,27 +78,13 @@ const App = () => (
   </Router>
 );
 
+// eslint-disable-next-line react/prop-types
 const ProtectedRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={(props) => {
       let isLoggedIn = false;
       const userToken = window.localStorage.getItem('user-token');
-      // axios
-      //   .get('http://localhost:3001/api/user/', {
-      //     headers: {
-      //       Authorization: `Bearer ${userToken}`,
-      //     },
-      //   })
-      //   .then(function (response) {
-      //     console.log('response data user token ', response.data.user.token);
-      //     if (response.data.user.token !== undefined) {
-      //       isLoggedIn = true;
-      //     }
-      //   })
-      //   .catch(function (err) {
-      //     console.log(' err %o', err);
-      //   });
       jwt.verify(userToken, 'secret', (err, data) => {
         if (err) {
           console.log(err);
@@ -108,6 +93,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => (
       });
       return isLoggedIn
         ? (<Component {...props} />)
+        // eslint-disable-next-line react/prop-types
         : (<Redirect to={{ pathname: `/${paths.UNAUTHORIZED}`, state: { from: props.location } }}/>);
     }}
   />
