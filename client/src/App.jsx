@@ -3,6 +3,7 @@ import {
   HashRouter as Router, Redirect, Route, Switch,
 } from 'react-router-dom';
 import './App.css';
+import * as jwt from 'jsonwebtoken';
 import BarbellCalculatorPage from './ui/pages/BarbellCalculatorPage';
 import LoginPage from './ui/pages/LoginPage';
 import Register from './ui/pages/Register';
@@ -10,12 +11,16 @@ import LandingPage from './ui/pages/LandingPage';
 import 'semantic-ui-css/semantic.min.css';
 import NotFound from './ui/pages/NotFound';
 import Converter from './ui/pages/Converter';
+import WeightInventoryPage from './ui/pages/WeightInventoryPage';
+import Unauthorized from './ui/pages/Unauthorized';
 
 export const paths = {
   LOGIN: 'login',
   REGISTER: 'register',
   CALCULATOR: 'calculator',
   CONVERTER: 'converter',
+  INVENTORY: 'inventory',
+  UNAUTHORIZED: 'unauthorized',
 };
 
 const unprotectedRoutes = [
@@ -26,13 +31,18 @@ const unprotectedRoutes = [
   },
   {
     path: `/${paths.LOGIN}`,
-    exact: false,
+    exact: true,
     component: LoginPage,
   },
   {
     path: `/${paths.REGISTER}`,
-    exact: false,
+    exact: true,
     component: Register,
+  },
+  {
+    path: `/${paths.UNAUTHORIZED}`,
+    exact: true,
+    component: Unauthorized,
   },
 ];
 
@@ -41,6 +51,11 @@ const protectedRoutes = [
     path: `/${paths.CALCULATOR}`,
     exact: true,
     component: BarbellCalculatorPage,
+  },
+  {
+    path: `/${paths.INVENTORY}`,
+    exact: true,
+    component: WeightInventoryPage,
   },
   {
     path: `/${paths.CONVERTER}`,
@@ -56,22 +71,30 @@ const App = () => (
         <Route key={route.path} {...route} />
       ))}
       {protectedRoutes.map((route) => (
-        <Route key={route.path} {...route} /> // TODO Change to ProtectedRoute after Auth is implemented
+        <ProtectedRoute key={route.path} {...route} />
       ))}
       <Route component={NotFound}/>
     </Switch>
   </Router>
 );
 
+// eslint-disable-next-line react/prop-types
 const ProtectedRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={(props) => {
-      // TODO: Auth
-      const isLoggedIn = false;
+      let isLoggedIn = false;
+      const userToken = window.localStorage.getItem('user-token');
+      jwt.verify(userToken, 'secret', (err, data) => {
+        if (err) {
+          console.log(err);
+        }
+        isLoggedIn = true;
+      });
       return isLoggedIn
         ? (<Component {...props} />)
-        : (<Redirect to={{ pathname: `/${paths.LOGIN}`, state: { from: props.location } }} />);
+        // eslint-disable-next-line react/prop-types
+        : (<Redirect to={{ pathname: `/${paths.UNAUTHORIZED}`, state: { from: props.location } }}/>);
     }}
   />
 );

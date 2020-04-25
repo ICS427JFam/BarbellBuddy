@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Image, Segment, Menu, Button,
-} from 'semantic-ui-react';
+import { Image, Segment, Menu, Button } from 'semantic-ui-react';
 import Footer from '../components/Shared/Footer';
 
 const divStyle = {
@@ -32,15 +30,21 @@ class LandingPage extends React.Component {
         </Menu>
 
         <Segment style={divStyle}>
-          <Image fluid src="https://raw.githubusercontent.com/ICS427JFam/BarbellBuddy/NavBar/client/public/bbLogo.png" />
+          <Image fluid src="https://raw.githubusercontent.com/ICS427JFam/BarbellBuddy/NavBar/client/public/bbLogo.png"/>
         </Segment>
 
         <Segment style={divStyle}>
-          <Image fluid src="https://raw.githubusercontent.com/ICS427JFam/BarbellBuddy/NavBar/client/public/landingDescription.png" />
+          <Image
+            fluid
+            src="https://raw.githubusercontent.com/ICS427JFam/BarbellBuddy/NavBar/client/public/landingDescription.png"
+          />
         </Segment>
 
         <Segment style={divStyle}>
-          <Image fluid src="https://raw.githubusercontent.com/ICS427JFam/BarbellBuddy/NavBar/client/public/landingCalc.png" />
+          <Image
+            fluid
+            src="https://raw.githubusercontent.com/ICS427JFam/BarbellBuddy/NavBar/client/public/landingCalc.png"
+          />
         </Segment>
 
         < Footer/>

@@ -12,15 +12,15 @@ const NavBar = () => (
   <div>
     <Menu inverted fluid widths={3} style={divStyle}>
       <Menu.Item
-        header="true"
+        header
         name="Barbell Calculator"
       />
       <Menu.Item
-        header="true"
+        header
         name="Weight Inventory"
       />
       <Menu.Item
-        header="true"
+        header
         name="Conversion Calculator"
       />
     </Menu>

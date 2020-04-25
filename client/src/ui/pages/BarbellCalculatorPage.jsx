@@ -1,6 +1,8 @@
 import React from 'react';
-import { Container, Form, Header } from 'semantic-ui-react';
+import { Container, Form, Header, Dropdown } from 'semantic-ui-react';
+import axios from 'axios';
 import Swal from 'sweetalert2/dist/sweetalert2.all.min';
+import * as jwt from 'jsonwebtoken';
 import Barbell from '../components/BarbellCalculator/Barbell';
 import Kilogram25Plate from '../components/BarbellCalculator/KilogramWeights/Kilogram25Plate';
 import Kilogram25Change from '../components/BarbellCalculator/KilogramWeights/Kilogram25Change';
@@ -19,6 +21,7 @@ import Pound10Plate from '../components/BarbellCalculator/PoundWeights/Pound10Pl
 import Pound5Change from '../components/BarbellCalculator/PoundWeights/Pound5Change';
 import Pound25Change from '../components/BarbellCalculator/PoundWeights/Pound25Change';
 import Footer from '../components/Shared/Footer';
+import NavBar from '../components/Shared/NavBar';
 
 class BarbellCalculatorPage extends React.Component {
   constructor(props) {
@@ -27,68 +30,101 @@ class BarbellCalculatorPage extends React.Component {
       weightInput: '',
       outputWeightsArr: [],
       outputMultipliersArr: [],
-      remainderAmount: 0,
+      weightInventory: [],
+      unit: 'kilograms',
     };
-    // TODO: These constants should be fetched from API
-    this.unit = 'pounds'; // kilograms or pounds (with the s)
-    this.barType = 'men'; // men or women
-    if (this.unit === 'kilograms') {
-      if (this.barType === 'men') {
-        this.barWeight = 20;
-      } else {
-        this.barWeight = 15;
+  }
+
+  componentDidMount() {
+    const comp = this;
+    const userToken = window.localStorage.getItem('user-token');
+    jwt.verify(userToken, 'secret', (err, data) => {
+      if (err) {
+        console.log(err);
       }
-      this.plates = [25, 20, 15, 10, 5, 2.5, 2, 1.5, 1, 0.5];
-      this.plateInventory = {
-        '25': 4,
-        '20': 2,
-        '15': 2,
-        '10': 2,
-        '5': 2,
-        '2.5': 2,
-        '2': 2,
-        '1.5': 2,
-        '1': 2,
-        '0.5': 2,
-      };
-    } else {
-      if (this.barType === 'men') {
-        this.barWeight = 45;
-      } else {
-        this.barWeight = 35;
+      axios
+        .get(`http://localhost:3001/api/weightInventory/${data.username}`, {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        })
+        .then(function (response) {
+          comp.setState({ weightInventory: response.data.weightInventory });
+        })
+        .catch(function (err2) {
+          console.log(err2);
+        });
+    });
+  }
+
+  getBarWeight = (barType, unit) => {
+    if (unit === 'kilograms') {
+      if (barType === 'men') {
+        return 20;
       }
-      this.plates = [45, 35, 25, 10, 5, 2.5, 1.25];
-      this.plateInventory = {
-        '45': 4,
-        '35': 4,
-        '25': 4,
-        '10': 4,
-        '5': 2,
-        '2.5': 2,
-      };
+      return 15;
     }
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.calculateWeightAvailable = this.calculateWeightAvailable.bind(this);
-    this.calculateWeights = this.calculateWeights.bind(this);
-    this.renderKilogramPlates = this.renderKilogramPlates.bind(this);
-  }
+    if (unit === 'pounds') {
+      if (barType === 'men') {
+        return 45;
+      }
+    }
+    return 35;
+  };
 
-  handleChange(e, { name, value }) {
+  getPlateInventory = (weightInventory, unit) => {
+    if (unit === 'kilograms') {
+      return weightInventory.kgInventory;
+    }
+    return weightInventory.lbInventory;
+  };
+
+  getPlates = (unit) => {
+    if (unit === 'kilograms') {
+      return [25, 20, 15, 10, 5, 2.5, 2, 1.5, 1, 0.5];
+    }
+    return [45, 35, 25, 10, 5, 2.5];
+  };
+
+  handleChange = (e, { name, value }) => {
     this.setState({ [name]: value });
-  }
+  };
 
-  handleSubmit(e) {
+  handleDropdownChange = (e, { value }) => {
+    this.setState(
+      {
+        unit: value,
+        outputWeightsArr: [],
+        outputMultipliersArr: [],
+        weightInput: '',
+      },
+    );
+  };
+
+  handleSubmit = (e) => {
     e.preventDefault();
-    const { weightInput } = this.state;
+    const { weightInput, weightInventory, unit } = this.state;
+    // const { unit } = weightInventory;
+    const barWeight = this.getBarWeight(weightInventory.barType, unit);
     const weightAvailable = this.calculateWeightAvailable();
     if (weightInput > weightAvailable) {
       Swal.fire({
         title: 'Weight Input Exceeded Amount Available',
         icon: 'error',
-        type: 'error',
         html: `<p>Your weight input has exceeded the amount of weight available in your inventory!</p>
-               <p>Total Weight Available (${this.unit}): ${weightAvailable} </p>`,
+               <p>Total Weight Available (${unit}): ${weightAvailable} </p>`,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+      });
+      return;
+    }
+    if (weightInput <= barWeight) {
+      Swal.fire({
+        title: 'Invalid Weight Input',
+        icon: 'error',
+        html: `<p>Your weight input must be greater than the weight of the bar.
+               <p>Bar Weight (${unit}): ${barWeight} </p>`,
         allowOutsideClick: false,
         allowEscapeKey: false,
         allowEnterKey: false,
@@ -96,24 +132,41 @@ class BarbellCalculatorPage extends React.Component {
       return;
     }
     this.calculateWeights(parseInt(weightInput, 10));
-  }
+  };
 
-  calculateWeightAvailable() {
-    const { plateInventory } = this;
+  calculateWeightAvailable = () => {
+    const { weightInventory, unit } = this.state;
+    const barWeight = this.getBarWeight(weightInventory.barType, unit);
+    const plateInventory = this.getPlateInventory(weightInventory, unit);
+    // FIXME the logic of this
+    // Problem is that we separate the keys and values of plateInventory into weights and multipliers, respectively
+    // Unfortunately weights is not guaranteed in order because of the fact that the keys that come from the
+    // database can also be in the form of 2_5 which will put them last in the array
+    // The weights.forEach(..) code below transforms 2_5 into 2.5 but now 2.5 is at the last of the array
+    // and the for loop below that works on the assumption that weights is sorted in ascending order (which is not because 2.5 is at the last of the array
     const weights = Object.keys(plateInventory);
     const multipliers = Object.values(plateInventory);
+    // Handle the change plate weights (i.e., 2_5, 1_5, etc...)
+    weights.forEach((weight, index) => {
+      if (weight.includes('_')) {
+        weights[index] = weight.split('_').join('.');
+      }
+    });
+
     let result = 0;
     for (let i = 0; i < weights.length; i++) {
       result += weights[i] * multipliers[i];
     }
-    result += this.barWeight;
+    result += barWeight;
     return result;
-  }
+  };
 
-  calculateWeights(weightInput) {
-    const {
-      barWeight, plates, plateInventory, unit,
-    } = this;
+  calculateWeights = (weightInput) => {
+    const { weightInventory, unit } = this.state;
+    const barWeight = this.getBarWeight(weightInventory.barType, unit);
+    const plates = this.getPlates(unit);
+    const plateInventory = this.getPlateInventory(weightInventory);
+    // const { unit } = weightInventory;
     const actualWeight = weightInput - barWeight;
     let remain = actualWeight / 2;
     const retWeightArr = [];
@@ -140,16 +193,15 @@ class BarbellCalculatorPage extends React.Component {
       Swal.fire({
         title: 'Weight Input Exceeded Amount Available',
         icon: 'info',
-        type: 'info',
         html: `Due to insufficient weight inventory, your weight input has been rounded down to ${weightInput - remainder} ${unit}`,
         timerProgressBar: true,
         timer: 5000,
       });
     }
     this.setState({ outputWeightsArr: retWeightArr, outputMultipliersArr: retMultiplierArr });
-  }
+  };
 
-  renderKilogramPlates() {
+  renderKilogramPlates = () => {
     const { outputWeightsArr, outputMultipliersArr } = this.state;
     const ret = [];
     for (let i = 0; i < outputWeightsArr.length; i++) {
@@ -205,9 +257,9 @@ class BarbellCalculatorPage extends React.Component {
       }
     }
     return ret;
-  }
+  };
 
-  renderPoundPlates() {
+  renderPoundPlates = () => {
     const { outputWeightsArr, outputMultipliersArr } = this.state;
     const ret = [];
     for (let i = 0; i < outputWeightsArr.length; i++) {
@@ -243,15 +295,36 @@ class BarbellCalculatorPage extends React.Component {
       }
     }
     return ret;
-  }
+  };
 
   render() {
-    const { weightInput, outputWeightsArr, outputMultipliersArr } = this.state;
-    const { unit } = this;
+    const { weightInput, outputWeightsArr, outputMultipliersArr, unit } = this.state;
+    // const { unit } = weightInventory;
+    const dropdownOptions = [
+      {
+        key: 'kilograms',
+        text: 'Kilograms (kgs)',
+        value: 'kilograms',
+      },
+      {
+        key: 'pounds',
+        text: 'Pounds (lbs)',
+        value: 'pounds',
+      },
+    ];
+    const dropShadowStyle = {
+      filter: 'drop-shadow(0 0 0.75rem black)',
+    };
     return (
       <>
+        <NavBar/>
         <Container textAlign="center" style={{ marginTop: 100 }}>
-          <Header>Input Weight ({unit})</Header>
+          <Header as="h1" style={dropShadowStyle}>Barbell Calculator</Header>
+          <Dropdown
+            defaultValue={unit}
+            onChange={this.handleDropdownChange}
+            options={dropdownOptions}
+          />
           <Form onSubmit={this.handleSubmit} style={{ maxWidth: 300, margin: 'auto' }}>
             <Form.Input
               name="weightInput"
@@ -283,7 +356,8 @@ class BarbellCalculatorPage extends React.Component {
         <Container textAlign="center" style={{ marginTop: 50 }}>
           <Header as="h1">Plates PER SIDE</Header>
           {outputWeightsArr.map((weight, index) => (outputMultipliersArr[index] !== 0
-            ? <Header as="h3">{weight} {unit} x{outputMultipliersArr[index]}</Header>
+            // eslint-disable-next-line react/no-array-index-key
+            ? <Header key={index} as="h3">{weight} {unit} x{outputMultipliersArr[index]}</Header>
             : ''))}
         </Container>
 
