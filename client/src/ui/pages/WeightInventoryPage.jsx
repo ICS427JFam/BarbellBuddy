@@ -1,7 +1,6 @@
 import React from 'react';
 import {
-  Button,
-  Container, Grid, Header, Label, Menu,
+  Button, Dropdown, Container, Grid, Header, Label, Menu, Loader,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import Swal from 'sweetalert2/dist/sweetalert2.all.min';
@@ -36,6 +35,7 @@ class WeightInventoryPage extends React.Component {
     super(props);
     this.state = {
       weightInventory: {},
+      barType: 'men',
     };
   }
 
@@ -53,7 +53,10 @@ class WeightInventoryPage extends React.Component {
           },
         })
         .then(function (response) {
-          comp.setState({ weightInventory: response.data.weightInventory });
+          comp.setState({
+            barType: response.data.weightInventory.barType,
+            weightInventory: response.data.weightInventory,
+          });
         })
         .catch(function (err2) {
           console.log(err2);
@@ -61,10 +64,17 @@ class WeightInventoryPage extends React.Component {
     });
   }
 
-  // TODO selector for barType
+  handleDropdownChange = (e, { value }) => {
+    this.setState(
+      {
+        barType: value,
+      },
+    );
+  };
+
   handleSubmit = (e) => {
     e.preventDefault();
-    const { weightInventory } = this.state;
+    const { weightInventory, barType } = this.state;
     const {
       kilograms25Plate,
       kilograms20Plate,
@@ -97,6 +107,7 @@ class WeightInventoryPage extends React.Component {
         weightInventory: {
           kgInventory: { ...weightInventory.kgInventory },
           lbInventory: { ...weightInventory.lbInventory },
+          barType,
         },
       };
       if (kilograms25Plate !== 0) {
@@ -153,6 +164,8 @@ class WeightInventoryPage extends React.Component {
           Swal.fire({
             title: 'Weight Inventory Updated',
             icon: 'success',
+          }).then(() => {
+            window.location.reload();
           });
         })
         .catch(function (err2) {
@@ -161,8 +174,10 @@ class WeightInventoryPage extends React.Component {
     });
   };
 
+  capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
+
   render() {
-    const { weightInventory } = this.state;
+    const { weightInventory, barType } = this.state;
     const redColor = 'red';
     const blueColor = 'blue';
     const yellowColor = 'yellow';
@@ -175,14 +190,43 @@ class WeightInventoryPage extends React.Component {
       marginTop: 25,
       marginBottom: 50,
     };
+    const dropdownOptions = [
+      {
+        key: 'men',
+        text: 'Men (20 kg / 45 lb)',
+        value: 'men',
+      },
+      {
+        key: 'women',
+        text: 'Women (15 kg / 35 lb)',
+        value: 'women',
+      },
+    ];
+    const barTypeHeaderStyle = {
+      marginRight: 10,
+    };
     return (
       <>
         <NavBar/>
         <Container textAlign="center" style={{ marginTop: 100 }}>
           <Header as="h1" style={dropShadowStyle}>Weight Inventory</Header>
-          <hr style={{ marginBottom: 50 }}/>
+          <hr/>
           <Grid centered columns={5}>
-            <Header as="h2"><b>Kilograms (kgs)</b></Header>
+            <Grid.Row>
+              <Header style={barTypeHeaderStyle}>Bar Type: </Header>
+              {Object.keys(weightInventory).length === 0 && weightInventory.constructor === Object
+                ? <Loader active inline/>
+                : (
+                  <Dropdown
+                    defaultValue={barType}
+                    onChange={this.handleDropdownChange}
+                    options={dropdownOptions}
+                  />
+                )}
+            </Grid.Row>
+            <Grid.Row>
+              <Header as="h2"><b>Kilograms (kgs)</b></Header>
+            </Grid.Row>
             <Grid.Row>
               <Label.Group circular size="massive">
                 <Menu borderless text>
@@ -209,7 +253,9 @@ class WeightInventoryPage extends React.Component {
           </Grid>
 
           <Grid centered columns={3}>
-            <Header as="h2"><b>Pounds (lbs)</b></Header>
+            <Grid.Row>
+              <Header as="h2"><b>Pounds (lbs)</b></Header>
+            </Grid.Row>
             <Grid.Row>
               <Label.Group circular size="massive">
                 <Menu borderless text>

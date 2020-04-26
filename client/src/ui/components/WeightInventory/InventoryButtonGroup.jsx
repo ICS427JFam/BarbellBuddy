@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
+import { Button, Loader } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { weightInventoryActions } from '../../../redux/reducers/WeightInventoryPage';
@@ -265,7 +265,7 @@ class InventoryButtonGroup extends React.Component {
       <>
         <Button.Group style={buttonGroupStyle}>
           <Button onClick={this.handleDecrease} disabled={count === 0 ? true : undefined}>-</Button>
-          <Button>{count}</Button>
+          <Button>{Number.isNaN(count) ? <Loader size="mini" active inline/> : count}</Button>
           <Button onClick={this.handleIncrease}>+</Button>
         </Button.Group>
       </>

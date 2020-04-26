@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 const express = require('express');
-const  cors = require('cors');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 
- const API_PORT = 3001;
+const API_PORT = 3001;
 const app = express();
 app.use(cors());
 
@@ -48,19 +48,23 @@ require('./config/passport');
 
 app.use(require('./routes'));
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
-app.use(function(err, req, res) {
+app.use(function (err, req, res) {
   console.log(err.stack);
 
   res.status(err.status || 500);
 
-  res.json({'errors': {
+  res.json({
+    'errors': {
       message: err.message,
       error: err
-    }});
+    }
+  });
 });
+
+module.exports = app;

@@ -51,11 +51,15 @@ class Converter extends React.Component {
       maxWidth: '100px',
       margin: '2em auto',
     };
+    const dropShadowStyle = {
+      filter: 'drop-shadow(0 0 0.75rem black)',
+    };
     return (
       <>
         <NavBar/>
         <Container style={containerStyle}>
-          <Header as="h1" textAlign="center">Weight Converter</Header>
+          <Header as="h1" style={dropShadowStyle} textAlign="center">Weight Converter</Header>
+          <hr/>
           <Form>
             <Form.Group widths="equal">
               <Form.Field>

@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
     "express": "latest",
@@ -29,7 +28,7 @@
     "lint-app": "eslint --fix --quiet --ext .jsx ./src/App.jsx",
     "lint": "npm run lint-ui && npm run lint-app",
     "build": "react-scripts build",
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -48,13 +47,16 @@
     ]
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.9.5",
+    "@testing-library/react": "^9.5.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^1.7.0",
-    "jest-puppeteer": "^4.4.0"
+    "jest-puppeteer": "^4.4.0",
+    "supertest": "^4.0.2"
   },
   "proxy": "http://localhost:3001"
 }
