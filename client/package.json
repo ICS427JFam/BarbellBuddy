@@ -6,7 +6,6 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
-    "babel-jest": "^25.4.0",
     "express": "latest",
     "gulp": "^4.0.2",
     "jsonwebtoken": "^8.5.1",

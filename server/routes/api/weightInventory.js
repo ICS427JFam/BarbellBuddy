@@ -21,21 +21,6 @@ router.get('/:username', auth.required, function (req, res, next) {
   }).catch(next);
 });
 
-router.post('/', auth.required, function (req, res, next) {
-  User.findById(req.payload.id).then(function (user) {
-    if (!user) {
-      return res.sendStatus(401);
-    }
-
-    const weightInventory = new WeightInventory(req.body.weightInventory);
-    weightInventory.userID = user.username;
-
-    return weightInventory.save().then(function () {
-      return res.json({ weightInventory: weightInventory.toAuthJSON() });
-    })
-  }).catch(next);
-});
-
 router.put('/:username', auth.required, function (req, res, next) {
   User.findById(req.payload.id).then(function (user) {
     if (!user) {
@@ -67,5 +52,20 @@ router.put('/:username', auth.required, function (req, res, next) {
     });
   }).catch(next);
 });
+
+// router.post('/', auth.required, function (req, res, next) {
+//   User.findById(req.payload.id).then(function (user) {
+//     if (!user) {
+//       return res.sendStatus(401);
+//     }
+//
+//     const weightInventory = new WeightInventory(req.body.weightInventory);
+//     weightInventory.userID = user.username;
+//
+//     return weightInventory.save().then(function () {
+//       return res.json({ weightInventory: weightInventory.toAuthJSON() });
+//     })
+//   }).catch(next);
+// });
 
 module.exports = router;
