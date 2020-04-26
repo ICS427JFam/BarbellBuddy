@@ -1,7 +1,7 @@
 import React from 'react';
 import 'semantic-ui-css/semantic.min.css';
 import {
-  Form, Container, Header, Button,
+  Form, Container, Header,
 } from 'semantic-ui-react';
 import NavBar from '../components/Shared/NavBar';
 import Footer from '../components/Shared/Footer';

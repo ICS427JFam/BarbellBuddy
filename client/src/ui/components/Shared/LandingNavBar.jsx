@@ -10,14 +10,13 @@ const divStyle = {
 };
 
 const menuItems = [
-  { label: 'Home', route: '/' },
-  { label: 'Barbell Calculator', route: 'calculator' },
-  { label: 'Weight Inventory', route: 'inventory' },
-  { label: 'Unit Conversion Calculator', route: 'converter' },
+  { label: 'BarbellBuddy', route: '/' },
+  { label: 'Sign Up', route: 'register' },
+  { label: 'Login', route: 'login' },
 ];
 
-const NavBar = () => (
-  <Menu inverted fluid widths={menuItems.length} style={divStyle}>
+const LandingNavBar = () => (
+  <Menu inverted style={divStyle}>
     {menuItems.map((item) => (
       <Menu.Item header key={item.route} as={NavLink} exact to={item.route}>
         <Header inverted as="h3">{item.label}</Header>
@@ -26,4 +25,4 @@ const NavBar = () => (
   </Menu>
 );
 
-export default NavBar;
+export default LandingNavBar;

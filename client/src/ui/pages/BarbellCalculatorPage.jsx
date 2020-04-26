@@ -104,7 +104,6 @@ class BarbellCalculatorPage extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { weightInput, weightInventory, unit } = this.state;
-    // const { unit } = weightInventory;
     const barWeight = this.getBarWeight(weightInventory.barType, unit);
     const weightAvailable = this.calculateWeightAvailable();
     if (weightInput > weightAvailable) {
@@ -166,14 +165,13 @@ class BarbellCalculatorPage extends React.Component {
     const barWeight = this.getBarWeight(weightInventory.barType, unit);
     const plates = this.getPlates(unit);
     const plateInventory = this.getPlateInventory(weightInventory);
-    // const { unit } = weightInventory;
     const actualWeight = weightInput - barWeight;
     let remain = actualWeight / 2;
     const retWeightArr = [];
     const retMultiplierArr = [];
     let remainder = 0;
     plates.forEach((plate) => {
-      let num = 0;
+      let num;
       const weightAvailable = plateInventory[plate];
       if (plate <= remain && weightAvailable > 0) {
         num = remain / plate;
@@ -299,7 +297,6 @@ class BarbellCalculatorPage extends React.Component {
 
   render() {
     const { weightInput, outputWeightsArr, outputMultipliersArr, unit } = this.state;
-    // const { unit } = weightInventory;
     const dropdownOptions = [
       {
         key: 'kilograms',
@@ -315,10 +312,18 @@ class BarbellCalculatorPage extends React.Component {
     const dropShadowStyle = {
       filter: 'drop-shadow(0 0 0.75rem black)',
     };
+    const weightsInputFormStyle = {
+      marginTop: 50,
+      marginBottom: 50,
+    };
+    const weightsTextOutputStyle = {
+      marginTop: 50,
+      marginBottom: 50,
+    };
     return (
       <>
         <NavBar/>
-        <Container textAlign="center" style={{ marginTop: 100 }}>
+        <Container textAlign="center" style={weightsInputFormStyle}>
           <Header as="h1" style={dropShadowStyle}>Barbell Calculator</Header>
           <Dropdown
             defaultValue={unit}
@@ -335,31 +340,35 @@ class BarbellCalculatorPage extends React.Component {
             <Form.Button content="Calculate"/>
           </Form>
         </Container>
-
-        <Barbell
-          leftSide={(
+        {outputWeightsArr.length !== 0
+          ? (
             <>
-              {unit === 'kilograms'
-                ? this.renderKilogramPlates()
-                : this.renderPoundPlates()}
-            </>
-          )}
-          rightSide={(
-            <>
-              {unit === 'kilograms'
-                ? this.renderKilogramPlates()
-                : this.renderPoundPlates()}
-            </>
-          )}
-        />
+              <Barbell
+                leftSide={(
+                  <>
+                    {unit === 'kilograms'
+                      ? this.renderKilogramPlates()
+                      : this.renderPoundPlates()}
+                  </>
+                )}
+                rightSide={(
+                  <>
+                    {unit === 'kilograms'
+                      ? this.renderKilogramPlates()
+                      : this.renderPoundPlates()}
+                  </>
+                )}
+              />
 
-        <Container textAlign="center" style={{ marginTop: 50 }}>
-          <Header as="h1">Plates PER SIDE</Header>
-          {outputWeightsArr.map((weight, index) => (outputMultipliersArr[index] !== 0
-            // eslint-disable-next-line react/no-array-index-key
-            ? <Header key={index} as="h3">{weight} {unit} x{outputMultipliersArr[index]}</Header>
-            : ''))}
-        </Container>
+              <Container textAlign="center" style={weightsTextOutputStyle}>
+                <Header as="h1">Plates PER SIDE</Header>
+                {outputWeightsArr.map((weight, index) => (outputMultipliersArr[index] !== 0
+                  ? <Header key={`${unit}-${weight}`} as="h3">{weight} {unit} x{outputMultipliersArr[index]}</Header>
+                  : ''))}
+              </Container>
+            </>
+          )
+          : ''}
 
         <Footer/>
       </>
