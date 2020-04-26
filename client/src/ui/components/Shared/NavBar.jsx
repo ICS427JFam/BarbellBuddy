@@ -17,10 +17,7 @@ const menuItems = [
 
 const handleLogout = () => {
   localStorage.removeItem('user-token');
-  // eslint-disable-next-line react/prop-types
-  // const { location } = props;
-  // TODO doesnt work
-  // return <Redirect to={{ pathname: '/inventory', state: { from: location } }}/>;
+  window.location.reload();
 };
 
 const NavBar = () => (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Form, Header, Dropdown } from 'semantic-ui-react';
+import { Container, Form, Header, Dropdown, Grid } from 'semantic-ui-react';
 import axios from 'axios';
 import Swal from 'sweetalert2/dist/sweetalert2.all.min';
 import * as jwt from 'jsonwebtoken';
@@ -342,16 +342,25 @@ class BarbellCalculatorPage extends React.Component {
       marginTop: 50,
       marginBottom: 50,
     };
+    const unitHeaderStyle = {
+      marginRight: 10,
+    };
     return (
       <>
         <NavBar/>
         <Container textAlign="center" style={weightsInputFormStyle}>
           <Header as="h1" style={dropShadowStyle}>Barbell Calculator</Header>
-          <Dropdown
-            defaultValue={unit}
-            onChange={this.handleDropdownChange}
-            options={dropdownOptions}
-          />
+          <hr/>
+          <Grid centered>
+            <Grid.Row>
+              <Header style={unitHeaderStyle}>Unit:</Header>
+              <Dropdown
+                defaultValue={unit}
+                onChange={this.handleDropdownChange}
+                options={dropdownOptions}
+              />
+            </Grid.Row>
+          </Grid>
           <Form onSubmit={this.handleSubmit} style={{ maxWidth: 300, margin: 'auto' }}>
             <Form.Input
               name="weightInput"
