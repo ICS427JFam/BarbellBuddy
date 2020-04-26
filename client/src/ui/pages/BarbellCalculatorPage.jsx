@@ -104,10 +104,10 @@ class BarbellCalculatorPage extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { weightInput, weightInventory, unit } = this.state;
-    // const { unit } = weightInventory;
     const barWeight = this.getBarWeight(weightInventory.barType, unit);
     const weightAvailable = this.calculateWeightAvailable();
-    if (weightInput > weightAvailable) {
+    const parsedWeightInput = parseInt(weightInput, 10);
+    if (parsedWeightInput > weightAvailable) {
       Swal.fire({
         title: 'Weight Input Exceeded Amount Available',
         icon: 'error',
@@ -119,7 +119,7 @@ class BarbellCalculatorPage extends React.Component {
       });
       return;
     }
-    if (weightInput <= barWeight) {
+    if (parsedWeightInput <= barWeight) {
       Swal.fire({
         title: 'Invalid Weight Input',
         icon: 'error',
@@ -131,32 +131,53 @@ class BarbellCalculatorPage extends React.Component {
       });
       return;
     }
-    this.calculateWeights(parseInt(weightInput, 10));
+    this.calculateWeights(parsedWeightInput);
+  };
+
+  sortKeys = (obj) => {
+    const key = Object.keys(obj)
+      .sort(function order(key1, key2) {
+        if (key1 < key2) return -1;
+        if (key1 > key2) return +1;
+        return 0;
+      });
+
+    // Taking the object in 'temp' object
+    // and deleting the original object.
+    const temp = {};
+
+    for (let i = 0; i < key.length; i++) {
+      temp[key[i]] = obj[key[i]];
+      delete obj[key[i]];
+    }
+
+    // Copying the object from 'temp' to
+    // 'original object'.
+    for (let i = 0; i < key.length; i++) {
+      obj[key[i]] = temp[key[i]];
+    }
+    return obj;
   };
 
   calculateWeightAvailable = () => {
     const { weightInventory, unit } = this.state;
     const barWeight = this.getBarWeight(weightInventory.barType, unit);
     const plateInventory = this.getPlateInventory(weightInventory, unit);
-    // FIXME the logic of this
-    // Problem is that we separate the keys and values of plateInventory into weights and multipliers, respectively
-    // Unfortunately weights is not guaranteed in order because of the fact that the keys that come from the
-    // database can also be in the form of 2_5 which will put them last in the array
-    // The weights.forEach(..) code below transforms 2_5 into 2.5 but now 2.5 is at the last of the array
-    // and the for loop below that works on the assumption that weights is sorted in ascending order (which is not because 2.5 is at the last of the array
-    const weights = Object.keys(plateInventory);
-    const multipliers = Object.values(plateInventory);
-    // Handle the change plate weights (i.e., 2_5, 1_5, etc...)
-    weights.forEach((weight, index) => {
-      if (weight.includes('_')) {
-        weights[index] = weight.split('_').join('.');
+    // Fix the keys of change plates in plate inventory (i.e., '2_5' to '2.5')
+    Object.entries(plateInventory).forEach(([key]) => {
+      if (key.includes('_')) {
+        const newKey = key.split('_').join('.');
+        delete Object.assign(plateInventory, { [newKey]: plateInventory[key] })[key];
       }
     });
-
+    const newPlateInventory = this.sortKeys(plateInventory);
     let result = 0;
-    for (let i = 0; i < weights.length; i++) {
-      result += weights[i] * multipliers[i];
-    }
+    Object
+      .entries(newPlateInventory)
+      .sort((a, b) => a[0] - b[0])
+      .forEach(([key, value]) => {
+        result += parseFloat(key) * value;
+      });
     result += barWeight;
     return result;
   };
@@ -165,15 +186,14 @@ class BarbellCalculatorPage extends React.Component {
     const { weightInventory, unit } = this.state;
     const barWeight = this.getBarWeight(weightInventory.barType, unit);
     const plates = this.getPlates(unit);
-    const plateInventory = this.getPlateInventory(weightInventory);
-    // const { unit } = weightInventory;
+    const plateInventory = this.getPlateInventory(weightInventory, unit);
     const actualWeight = weightInput - barWeight;
     let remain = actualWeight / 2;
     const retWeightArr = [];
     const retMultiplierArr = [];
     let remainder = 0;
     plates.forEach((plate) => {
-      let num = 0;
+      let num;
       const weightAvailable = plateInventory[plate];
       if (plate <= remain && weightAvailable > 0) {
         num = remain / plate;
@@ -299,7 +319,6 @@ class BarbellCalculatorPage extends React.Component {
 
   render() {
     const { weightInput, outputWeightsArr, outputMultipliersArr, unit } = this.state;
-    // const { unit } = weightInventory;
     const dropdownOptions = [
       {
         key: 'kilograms',
@@ -315,10 +334,18 @@ class BarbellCalculatorPage extends React.Component {
     const dropShadowStyle = {
       filter: 'drop-shadow(0 0 0.75rem black)',
     };
+    const weightsInputFormStyle = {
+      marginTop: 50,
+      marginBottom: 50,
+    };
+    const weightsTextOutputStyle = {
+      marginTop: 50,
+      marginBottom: 50,
+    };
     return (
       <>
         <NavBar/>
-        <Container textAlign="center" style={{ marginTop: 100 }}>
+        <Container textAlign="center" style={weightsInputFormStyle}>
           <Header as="h1" style={dropShadowStyle}>Barbell Calculator</Header>
           <Dropdown
             defaultValue={unit}
@@ -335,31 +362,35 @@ class BarbellCalculatorPage extends React.Component {
             <Form.Button content="Calculate"/>
           </Form>
         </Container>
-
-        <Barbell
-          leftSide={(
+        {outputWeightsArr.length !== 0
+          ? (
             <>
-              {unit === 'kilograms'
-                ? this.renderKilogramPlates()
-                : this.renderPoundPlates()}
-            </>
-          )}
-          rightSide={(
-            <>
-              {unit === 'kilograms'
-                ? this.renderKilogramPlates()
-                : this.renderPoundPlates()}
-            </>
-          )}
-        />
+              <Barbell
+                leftSide={(
+                  <>
+                    {unit === 'kilograms'
+                      ? this.renderKilogramPlates()
+                      : this.renderPoundPlates()}
+                  </>
+                )}
+                rightSide={(
+                  <>
+                    {unit === 'kilograms'
+                      ? this.renderKilogramPlates()
+                      : this.renderPoundPlates()}
+                  </>
+                )}
+              />
 
-        <Container textAlign="center" style={{ marginTop: 50 }}>
-          <Header as="h1">Plates PER SIDE</Header>
-          {outputWeightsArr.map((weight, index) => (outputMultipliersArr[index] !== 0
-            // eslint-disable-next-line react/no-array-index-key
-            ? <Header key={index} as="h3">{weight} {unit} x{outputMultipliersArr[index]}</Header>
-            : ''))}
-        </Container>
+              <Container textAlign="center" style={weightsTextOutputStyle}>
+                <Header as="h1">Plates PER SIDE</Header>
+                {outputWeightsArr.map((weight, index) => (outputMultipliersArr[index] !== 0
+                  ? <Header key={`${unit}-${weight}`} as="h3">{weight} {unit} x{outputMultipliersArr[index]}</Header>
+                  : ''))}
+              </Container>
+            </>
+          )
+          : ''}
 
         <Footer/>
       </>

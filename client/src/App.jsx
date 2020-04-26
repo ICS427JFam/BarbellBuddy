@@ -4,14 +4,16 @@ import {
 } from 'react-router-dom';
 import './App.css';
 import * as jwt from 'jsonwebtoken';
-import BarbellCalculatorPage from './ui/pages/BarbellCalculatorPage';
 import LoginPage from './ui/pages/LoginPage';
 import Register from './ui/pages/Register';
 import LandingPage from './ui/pages/LandingPage';
 import 'semantic-ui-css/semantic.min.css';
 import NotFound from './ui/pages/NotFound';
+/* eslint-disable import/no-cycle */
+import BarbellCalculatorPage from './ui/pages/BarbellCalculatorPage';
 import Converter from './ui/pages/Converter';
 import WeightInventoryPage from './ui/pages/WeightInventoryPage';
+/* eslint-enable import/no-cycle */
 import Unauthorized from './ui/pages/Unauthorized';
 
 export const paths = {
@@ -85,9 +87,10 @@ const ProtectedRoute = ({ component: Component, ...rest }) => (
     render={(props) => {
       let isLoggedIn = false;
       const userToken = window.localStorage.getItem('user-token');
-      jwt.verify(userToken, 'secret', (err, data) => {
+      jwt.verify(userToken, 'secret', (err) => {
         if (err) {
           console.log(err);
+          return;
         }
         isLoggedIn = true;
       });

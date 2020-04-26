@@ -5,6 +5,8 @@ import {
 } from 'semantic-ui-react';
 import axios from 'axios';
 import * as Swal from 'sweetalert2';
+import LandingNavBar from '../components/Shared/LandingNavBar';
+import Footer from '../components/Shared/Footer';
 
 export default class LoginPage extends React.Component {
   constructor(props) {
@@ -58,7 +60,9 @@ export default class LoginPage extends React.Component {
     const containerStyle = { marginTop: 15 };
 
     return (
-      <div>
+      <>
+        <LandingNavBar/>
+
         <Container style={containerStyle}>
           <Grid textAlign="center" verticalAlign="middle" centered columns={2}>
             <Grid.Column>
@@ -94,7 +98,9 @@ export default class LoginPage extends React.Component {
             </Grid.Column>
           </Grid>
         </Container>
-      </div>
+
+        <Footer/>
+      </>
     );
   }
 }

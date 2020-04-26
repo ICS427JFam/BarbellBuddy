@@ -36,8 +36,6 @@ class WeightInventoryPage extends React.Component {
     super(props);
     this.state = {
       weightInventory: {},
-      // checked: false, // default is kilograms (false)
-      // unit: 'kilograms',
     };
   }
 
@@ -63,19 +61,7 @@ class WeightInventoryPage extends React.Component {
     });
   }
 
-  // handleRadioSliderToggle = () => {
-  //   this.setState((prevState) => ({
-  //     checked: !prevState.checked,
-  //   }), () => {
-  //     const { unit } = this.state;
-  //     if (unit === 'kilograms') {
-  //       this.setState({ unit: 'pounds' });
-  //     } else {
-  //       this.setState({ unit: 'kilograms' });
-  //     }
-  //   });
-  // };
-
+  // TODO selector for barType
   handleSubmit = (e) => {
     e.preventDefault();
     const { weightInventory } = this.state;
@@ -176,7 +162,7 @@ class WeightInventoryPage extends React.Component {
   };
 
   render() {
-    // const { unit, checked } = this.state;
+    const { weightInventory } = this.state;
     const redColor = 'red';
     const blueColor = 'blue';
     const yellowColor = 'yellow';
@@ -185,24 +171,15 @@ class WeightInventoryPage extends React.Component {
     const dropShadowStyle = {
       filter: 'drop-shadow(0 0 0.75rem black)',
     };
+    const saveInventoryButtonStyle = {
+      marginTop: 25,
+      marginBottom: 50,
+    };
     return (
       <>
         <NavBar/>
         <Container textAlign="center" style={{ marginTop: 100 }}>
           <Header as="h1" style={dropShadowStyle}>Weight Inventory</Header>
-          {/* <Menu text widths={3}> */}
-          {/* <Menu.Item position="right"> */}
-          {/*   <Header as="h2" style={checked ? undefined : checkedStyle}>Kilograms (kg)</Header> */}
-          {/* </Menu.Item> */}
-          {/* <Menu.Item> */}
-          {/*   <Radio slider onChange={this.handleRadioSliderToggle}/> */}
-          {/* </Menu.Item> */}
-          {/* <Menu.Item position="left"> */}
-          {/*   <Header as="h2" style={checked ? checkedStyle : undefined}>Pounds (lbs)</Header> */}
-          {/* </Menu.Item> */}
-          {/* </Menu> */}
-          {/* {unit === 'kilograms' */}
-          {/* ? ( */}
           <hr style={{ marginBottom: 50 }}/>
           <Grid centered columns={5}>
             <Header as="h2"><b>Kilograms (kgs)</b></Header>
@@ -230,8 +207,7 @@ class WeightInventoryPage extends React.Component {
               </Label.Group>
             </Grid.Row>
           </Grid>
-          {/* ) */}
-          {/*: ( */}
+
           <Grid centered columns={3}>
             <Header as="h2"><b>Pounds (lbs)</b></Header>
             <Grid.Row>
@@ -254,8 +230,13 @@ class WeightInventoryPage extends React.Component {
               </Label.Group>
             </Grid.Row>
           </Grid>
-          {/* )} */}
-          <Button color="blue" size="massive" onClick={this.handleSubmit}>Save Inventory</Button>
+          {Object.keys(weightInventory).length === 0 && weightInventory.constructor === Object // check if empty
+            ? ''
+            : (
+              <Button style={saveInventoryButtonStyle} color="blue" size="massive" onClick={this.handleSubmit}>
+                Save Inventory
+              </Button>
+            )}
         </Container>
 
         <Footer/>
