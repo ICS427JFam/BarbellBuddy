@@ -106,7 +106,8 @@ class BarbellCalculatorPage extends React.Component {
     const { weightInput, weightInventory, unit } = this.state;
     const barWeight = this.getBarWeight(weightInventory.barType, unit);
     const weightAvailable = this.calculateWeightAvailable();
-    if (weightInput > weightAvailable) {
+    const parsedWeightInput = parseInt(weightInput, 10);
+    if (parsedWeightInput > weightAvailable) {
       Swal.fire({
         title: 'Weight Input Exceeded Amount Available',
         icon: 'error',
@@ -118,7 +119,7 @@ class BarbellCalculatorPage extends React.Component {
       });
       return;
     }
-    if (weightInput <= barWeight) {
+    if (parsedWeightInput <= barWeight) {
       Swal.fire({
         title: 'Invalid Weight Input',
         icon: 'error',
@@ -130,32 +131,53 @@ class BarbellCalculatorPage extends React.Component {
       });
       return;
     }
-    this.calculateWeights(parseInt(weightInput, 10));
+    this.calculateWeights(parsedWeightInput);
+  };
+
+  sortKeys = (obj) => {
+    const key = Object.keys(obj)
+      .sort(function order(key1, key2) {
+        if (key1 < key2) return -1;
+        if (key1 > key2) return +1;
+        return 0;
+      });
+
+    // Taking the object in 'temp' object
+    // and deleting the original object.
+    const temp = {};
+
+    for (let i = 0; i < key.length; i++) {
+      temp[key[i]] = obj[key[i]];
+      delete obj[key[i]];
+    }
+
+    // Copying the object from 'temp' to
+    // 'original object'.
+    for (let i = 0; i < key.length; i++) {
+      obj[key[i]] = temp[key[i]];
+    }
+    return obj;
   };
 
   calculateWeightAvailable = () => {
     const { weightInventory, unit } = this.state;
     const barWeight = this.getBarWeight(weightInventory.barType, unit);
     const plateInventory = this.getPlateInventory(weightInventory, unit);
-    // FIXME the logic of this
-    // Problem is that we separate the keys and values of plateInventory into weights and multipliers, respectively
-    // Unfortunately weights is not guaranteed in order because of the fact that the keys that come from the
-    // database can also be in the form of 2_5 which will put them last in the array
-    // The weights.forEach(..) code below transforms 2_5 into 2.5 but now 2.5 is at the last of the array
-    // and the for loop below that works on the assumption that weights is sorted in ascending order (which is not because 2.5 is at the last of the array
-    const weights = Object.keys(plateInventory);
-    const multipliers = Object.values(plateInventory);
-    // Handle the change plate weights (i.e., 2_5, 1_5, etc...)
-    weights.forEach((weight, index) => {
-      if (weight.includes('_')) {
-        weights[index] = weight.split('_').join('.');
+    // Fix the keys of change plates in plate inventory (i.e., '2_5' to '2.5')
+    Object.entries(plateInventory).forEach(([key]) => {
+      if (key.includes('_')) {
+        const newKey = key.split('_').join('.');
+        delete Object.assign(plateInventory, { [newKey]: plateInventory[key] })[key];
       }
     });
-
+    const newPlateInventory = this.sortKeys(plateInventory);
     let result = 0;
-    for (let i = 0; i < weights.length; i++) {
-      result += weights[i] * multipliers[i];
-    }
+    Object
+      .entries(newPlateInventory)
+      .sort((a, b) => a[0] - b[0])
+      .forEach(([key, value]) => {
+        result += parseFloat(key) * value;
+      });
     result += barWeight;
     return result;
   };
@@ -164,7 +186,7 @@ class BarbellCalculatorPage extends React.Component {
     const { weightInventory, unit } = this.state;
     const barWeight = this.getBarWeight(weightInventory.barType, unit);
     const plates = this.getPlates(unit);
-    const plateInventory = this.getPlateInventory(weightInventory);
+    const plateInventory = this.getPlateInventory(weightInventory, unit);
     const actualWeight = weightInput - barWeight;
     let remain = actualWeight / 2;
     const retWeightArr = [];
