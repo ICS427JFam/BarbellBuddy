@@ -5,6 +5,25 @@ const auth = require('../auth');
 const User = mongoose.model('User');
 const WeightInventory = mongoose.model('WeightInventory');
 
+// TODO: remove, debugging purposes only
+router.get('/allUsers', function (req, res, next) {
+  User.find({}).then(function (results) {
+    return res.json({
+      users: results.map(function (user) {
+        return user.toAuthJSON();
+      })
+    })
+  }).catch(next);
+});
+
+router.get('/loggedIn', function (req, res) {
+  if (req.user) {
+    return res.json({ authenthicated: true });
+  } else {
+    res.json({ authenthicated: false });
+  }
+});
+
 /**
  * Return the logged in user's info
  */
