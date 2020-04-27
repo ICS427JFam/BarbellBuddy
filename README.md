@@ -5,8 +5,8 @@
 
 ```
 ● Online Repository: ​ ​https://github.com/ICS427JFam/BarbellBuddy
-● Report Documentation File:
-● Release Version: ​https://github.com/ICS427JFam/BarbellBuddy/releases/tag/1.0.
+● Report Documentation File: https://github.com/ICS427JFam/BarbellBuddy/blob/master/ICS%20427%20Team%20Report%20-%20Assignment%205.pdf
+● Release Version: ​https://github.com/ICS427JFam/BarbellBuddy/releases/tag/1.0.1
 ● Wiki Page: ​https://github.com/ICS427JFam/BarbellBuddy/wiki
 ```
 ## Responsibilities
