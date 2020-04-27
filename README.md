@@ -4,6 +4,7 @@
 ## Link
 
 https://github.com/ICS427JFam/BarbellBuddy
+https://github.com/ICS427JFam/BarbellBuddy/wiki
 
 ## Progress
 
